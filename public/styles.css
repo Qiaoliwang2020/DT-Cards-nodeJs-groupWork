@@ -103,12 +103,66 @@ h1.home-title{
   color: #AEAEB2;
 }
 .button-primary{
+  display: inline-block;
   width: 340px;
+  max-width: 90%;
   height: 58px;
+  line-height: 58px;
+  text-align: center;
   background: linear-gradient(180deg, #8FFB7D 0%, #2CBB87 100%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 14px;
   color: #FFFFFF;
   border:0px;
   cursor: pointer;
+}
+.modal{
+  height: 95%!important;
+}
+#modal-login .modal-footer{
+  text-align: center!important;
+}
+.modal .modal-title{
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+.modal .notice-link{
+  margin-top: 100px;
+}
+.modal-close-icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  line-height: 28px;
+  text-align: center;
+  font-weight: bolder;
+  background-color: rgba(118,118,128,.12);
+  position: absolute;
+  right: 20px;
+  top:20px;
+}
+/* re-write materializecss */
+.modal.bottom-sheet{
+  border-top-left-radius: 20px!important;
+  border-top-right-radius: 20px !important;
+  max-height: 85%!important;
+}
+.modal-content{
+  position: relative;
+}
+label {
+  font-size: .9rem;
+  color: #333;
+}
+input{
+  background-color: #f2f2f2!important;
+  border-radius: 6px!important;
+  border-bottom: 0px solid #FFFFFF!important;
+}
+input:focus{
+  border-bottom: 0px solid #FFFFFF!important;
+}
+.mt-10{
+  margin-top: 10px;
 }
