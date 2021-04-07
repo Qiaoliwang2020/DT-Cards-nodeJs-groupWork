@@ -1,34 +1,30 @@
 .helloInput {
   width: 200px;
 }
-
-.title{
-  color: white;
-}
 .mainText{
   color:white;
 }
-
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  background-color: #B783C3;
-
 }
-
 .page-footer{
-  background-color: #9E65A9;
+  text-align: center;
+  background-color: #FFFFFF;
+}
+.page-footer .footer-copyright{
+  font-size: 12px;
+  color: #d7d7d7;
+  background-color: #FFFFFF;
 }
 main {
   flex: 1 0 auto;
 }
-
 label.active {
   color: #2c0235;
   font-weight: bold;
   font-size: large;
-  /* text-align: center; */
 }
 
 .recordForm {
@@ -84,4 +80,35 @@ a.hover {
 #insect-icon {
   margin-top: 20px;
   font-size: 30px;
+}
+
+/*
+ *  add by qiaoli wang
+ *  wangqiao@deakin.edu.au
+*/
+
+.brand-logo{
+  text-align: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  background-color: #EEFCF3;
+  border-bottom-left-radius: 50px;
+}
+h1.home-title{
+  font-size: 2.2rem;
+  color: #000000;
+  text-align: center;
+}
+.home-des{
+  color: #AEAEB2;
+}
+.button-primary{
+  width: 340px;
+  height: 58px;
+  background: linear-gradient(180deg, #8FFB7D 0%, #2CBB87 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  color: #FFFFFF;
+  border:0px;
+  cursor: pointer;
 }
