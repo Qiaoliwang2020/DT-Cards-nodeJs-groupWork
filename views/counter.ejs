@@ -1,0 +1,105 @@
+<div class="container">
+    <h1 class="title">Bugs Counter</h1>
+
+    <div class="row">
+        <div class="row">
+            <div class="col s12">
+              <ul class="tabs">
+                <li class="tab col s6"><a  class="active" href="#test1">Data</a></li>
+                <li class="tab col s6"><a href="#test2">Map</a></li>
+
+              </ul>
+            </div>
+            <div id="test1" class="col s12">
+                
+                <% for (let i=0; i < greenhouseData.length; i++) { %> 
+            
+                    <a class="listedPodCard modal-trigger" href="#<%= greenhouseData[i]._id %>">
+                        <div class="card col s12">
+                            <div class="card-content" style="padding: 10px;">
+                                
+                                <div class="col s9 l9 ">
+                                    <div class="col s12 " ><span id="podName_span">Pod: <b><%= greenhouseData[i].podName %> </b></span></div>
+                                    <div class="col s12 "><span>Last:<b> <% if (!greenhouseData[i].timeStamp) { %>
+                                        N/A 
+                                    <% } else {  %> 
+                                         <%= greenhouseData[i].timeStamp %> 
+                                    <% } %></b></span>
+                                    </div>
+                                
+                                </div>
+    
+                          
+                                <div class="col s3 l3 right">
+                                    <span id="insectsAmount_span"><p><b> <% if (!greenhouseData[i].insectsAmount) { %>
+                                        N/A 
+                                   <% } else { %> 
+                                        <%= greenhouseData[i].insectsAmount %> 
+                                   <% } %> </b></p></span>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </a>
+    
+                    <div id="<%= greenhouseData[i]._id %>" class="modal">
+                        <div class="modal-content">
+                            <span class="card-title grey-text text-darken-4"> Update pod <%= greenhouseData[i].podName %> </span>
+                            
+                            <form id="<%= greenhouseData[i]._id %>_recordForm" class="col s12 recordForm">
+                                <div class="input-field col s12">
+                                    <input  placeholder="Amount of insects" id="<%= greenhouseData[i]._id %>_insectsAmount" type="number" class="validate" required>
+                                    <label for="insectsAmount"> Insects Amount </label>
+                                </div>
+                            </form>
+                        </div>
+    
+                        <div class="modal-footer">
+                            <div class="row center">
+                                <button type="submit" id="<%= greenhouseData[i]._id %>" class="waves-effect waves-light btn-large recordButton" style="background-color: #9E65A9;">
+                                    <i class="material-icons left" style="color:white;">update</i>
+                                    Record
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+            <% } %>
+    
+            </div>
+            <div id="test2" class="col s12">
+                <img  src="assets/map.jpg" />
+            </div>
+
+        </div>
+        
+        
+        
+        
+        <!-- Modal Trigger -->
+        <!--div id="addButton-container" class="col s12">
+            <button id="addButton" class="waves-effect waves-light btn-floating btn-large modal-trigger" data-target="addCardModal">
+                <i class="material-icons">add</i>
+            </button>
+        </div-->
+
+        <!-- Modal Structure -->
+        <div id="addCardModal" class="modal">
+            <div class="modal-content">
+                <h4>New area</h4>
+                <p>Please provide area ID</p>
+                <div class="input-field col s12">
+                    <input  placeholder="Pod name (e.g. A1)" id="podName" type="text" class="validate" required>
+                    <label for="podName"> Area ID </label>
+                </div>
+            </div>
+            <!--div class="modal-footer">
+                <div class="row center">
+                    <a id="addAreaButton" class="modal-close waves-effect waves-light btn">Submit</a>
+                </div>
+            </div-->
+        </div>
+
+    </div>
+    
+</div>

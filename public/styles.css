@@ -1,0 +1,87 @@
+.helloInput {
+  width: 200px;
+}
+
+.title{
+  color: white;
+}
+.mainText{
+  color:white;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #B783C3;
+
+}
+
+.page-footer{
+  background-color: #9E65A9;
+}
+main {
+  flex: 1 0 auto;
+}
+
+label.active {
+  color: #2c0235;
+  font-weight: bold;
+  font-size: large;
+  /* text-align: center; */
+}
+
+.recordForm {
+  margin-top: 11.25px;
+}
+
+#addButton-container {
+  height: 317.531px;
+  margin-top: 7.5px;
+  margin-bottom: 15px;
+}
+
+#addButton {
+  top: 40%;
+  background-color: #9E65A9;
+}
+
+.modal {
+  height: 50%
+}
+
+.card {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.preloader-wrapper {
+  position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+}
+
+a.hover {
+  cursor: pointer;
+}
+
+.card-content {
+  color: black;
+}
+
+#podName_span {
+  font-size: 18px;
+}
+
+#insectsAmount_span {
+  font-size: 30px;
+}
+
+#insect-icon {
+  margin-top: 20px;
+  font-size: 30px;
+}

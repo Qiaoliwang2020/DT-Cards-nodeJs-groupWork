@@ -1,5 +1,5 @@
 ---
 applications:
- - name: GetStartedNode
-   random-route: true
-   memory: 256M
+- name:    dt-cards
+  random-route: true
+  memory:  128M
