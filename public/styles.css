@@ -116,10 +116,14 @@ h1.home-title{
   border:0px;
   cursor: pointer;
 }
+.mt-10{
+  margin-top: 10px;
+}
 .modal{
   height: 95%!important;
 }
-#modal-login .modal-footer{
+#modal-login .modal-footer,
+#modal-register .modal-footer{
   text-align: center!important;
 }
 .modal .modal-title{
@@ -146,7 +150,7 @@ h1.home-title{
 .modal.bottom-sheet{
   border-top-left-radius: 20px!important;
   border-top-right-radius: 20px !important;
-  max-height: 85%!important;
+  max-height: 95%!important;
 }
 .modal-content{
   position: relative;
@@ -162,7 +166,4 @@ input{
 }
 input:focus{
   border-bottom: 0px solid #FFFFFF!important;
-}
-.mt-10{
-  margin-top: 10px;
 }

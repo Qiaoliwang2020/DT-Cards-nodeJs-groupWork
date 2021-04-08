@@ -39,18 +39,48 @@
         <div class="modal-content">
             <div class="modal-close-icon modal-close">x</div>
             <h4 class="modal-title">Login</h4>
-            <div class="row">
+            <div>
                 <label>Username/ Email</label>
                 <div class="mt-10"><input/></div>
             </div>
-            <div class="row">
+            <div>
                 <label class="mb-20">Password</label>
                 <div class="mt-10"><input/></div>
             </div>
-            <p class="center notice-link">Don't have an account? <a href="#">Create an account.</a></p>
+            <p class="center notice-link">Don't have an account? <a class="modal-trigger modal-close" href="#modal-register">Create an account.</a></p>
         </div>
         <div class="modal-footer">
             <a class="button-primary" href="#">Login</a>
+        </div>
+    </div>
+    <div id="modal-register" class="modal bottom-sheet">
+        <div class="modal-content">
+            <div class="modal-close-icon modal-close">x</div>
+            <h4 class="modal-title">Create an account</h4>
+            <div>
+                <label>Full name</label>
+                <div class="mt-10"><input/></div>
+            </div>
+            <div>
+                <label class="mb-20">Email</label>
+                <div class="mt-10"><input/></div>
+            </div>
+            <div>
+                <label>Phone</label>
+                <div class="mt-10"><input/></div>
+            </div>
+            <div>
+                <label class="mb-20">Password</label>
+                <div class="mt-10"><input/></div>
+            </div>
+            <div>
+                <label class="mb-20">Confirm Password</label>
+                <div class="mt-10"><input/></div>
+            </div>
+            <p class="center">have an account? <a class="modal-trigger modal-close" href="#modal-login">Login.</a></p>
+        </div>
+        <div class="modal-footer">
+            <a class="button-primary" href="#">Register</a>
         </div>
     </div>
     <footer class="page-footer">
