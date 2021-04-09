@@ -81,7 +81,6 @@ a.hover {
   margin-top: 20px;
   font-size: 30px;
 }
-
 /*
  *  add by qiaoli wang
  *  wangqiao@deakin.edu.au
@@ -118,6 +117,12 @@ h1.home-title{
 }
 .mt-10{
   margin-top: 10px;
+}
+.mt-20{
+  margin-top: 10px;
+}
+.text-right{
+  text-align: right;
 }
 .modal{
   height: 95%!important;
@@ -166,4 +171,106 @@ input{
 }
 input:focus{
   border-bottom: 0px solid #FFFFFF!important;
+}
+/*--home page------*/
+h1.page-title{
+  font-size: 2.25rem;
+  font-weight: bold;
+}
+.page-nav-profile{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #8E8E93;
+  font-size: 16px;
+}
+.user-icon{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  border:1px solid #f2f2f2;
+}
+.card-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 24px;
+  color: #FFFFFF;
+  cursor: pointer;
+  padding: 10px 15px;
+  margin-top: 15px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+.card-item .card-label{
+  font-size: 14px;
+}
+.card-item .card-amount{
+  font-size: 34px;
+}
+.card-item .card-amount:before{
+  content: '$';
+}
+.card-item .card-location{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.history-list .list-title{
+  font-size: 22px;
+  font-weight: bold;
+}
+.history-list .list-header{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0px;
+}
+.history-list .history-item{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.h-item-left{
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background-color: #F2F2F7;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.h-item-left img{
+  mix-blend-mode: luminosity;
+}
+.h-item-right{
+  flex: 1;
+}
+.h-item-title{
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.h-item-info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.h-item-info .date{
+  color: #8E8E93;
+}
+.h-item-info .price{
+  color: #000000;
+}
+.bottom-bar{
+  position: fixed;
+  margin: auto;
+  left: 0px;
+  right: 0px;
+  bottom: 35px;
 }
