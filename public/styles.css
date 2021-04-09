@@ -121,6 +121,15 @@ h1.home-title{
 .mt-20{
   margin-top: 10px;
 }
+.ml-20{
+  margin-left: 20px;
+}
+.mb-10{
+  margin-bottom: 10px;
+}
+.mb-20{
+  margin-bottom: 20px;
+}
 .text-right{
   text-align: right;
 }
@@ -128,7 +137,8 @@ h1.home-title{
   height: 95%!important;
 }
 #modal-login .modal-footer,
-#modal-register .modal-footer{
+#modal-register .modal-footer,
+#modal-new-card .modal-footer{
   text-align: center!important;
 }
 .modal .modal-title{
