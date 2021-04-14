@@ -6,6 +6,7 @@ const counterRoute = require('./counter');
 const dashboardRoute = require('./dashboard');
 const dataRoute=require('./data');
 const homeRoute = require('./home');
+const cardRoute = require('./cardDetails');
 
 
 
@@ -20,9 +21,8 @@ module.exports = (params) => {
     router.use('/counter', counterRoute(params));
     router.use('/dashboard', dashboardRoute(params));
     router.use('/home', homeRoute(params));
-    router.use('/data',dataRoute(params))
-
-
-
+    router.use('/card',cardRoute(params));
+    router.use('/data',dataRoute(params));
+    
     return router;
 };

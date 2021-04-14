@@ -1,0 +1,41 @@
+<div class="container card-details-view">
+    <h1 class="page-title center">Melbourne</h1>
+    <div class="card-details" style="background: #66B96A;">
+        <div class="card-content" >
+            <div class="card-balance">
+                <div class="card-label">Balance</div>
+                <div class="card-amount">25.00</div>
+            </div>
+            <div class="card-icon">
+                <img src="/assets/icon/melbourne.png" width="35" height="35">
+            </div>   
+        </div>
+        <div class="card-number mt-10">
+            SN0172026032121
+        </div>
+        <div class="card-barcode">
+            <svg id="barcode"></svg>
+        </div>
+        <div class="card-bottom mt-10">
+            <span>Melbourne</span>
+            <span>EXPIRY 9/24</span>
+        </div>
+    </div>
+    <div class="create-time mt-20">
+        Create Time: 26/03/2021
+    </div>
+    <div class="opertation-bar mt-20">
+        <a href="#">Withdraw</a>
+        <a href="#">Recharge</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
+<script>
+   JsBarcode("#barcode", "SN0172026032121",{
+    lineColor: "#000",
+    width:1.55,
+    height: 30,
+    displayValue: false
+   });
+</script>
+
