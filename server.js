@@ -92,18 +92,18 @@ app.listen(port, () => {
 
 function getAppIDConfig() {
 	let config;
-
+	let env = process.env.NODE_ENV || 'development';
+	console.log(env,'env')
 	try {
 		// if running locally we'll have the local config file
 		config = require('./localdev-config.json');
-	} catch (e) {
-		if (process.env.APPID_SERVICE_BINDING) { // if running on Kubernetes this env variable would be defined
-			config = JSON.parse(process.env.APPID_SERVICE_BINDING);
-			config.redirectUri = process.env.redirectUri;
-		} else { // running on CF
-			let vcapApplication = JSON.parse(process.env["VCAP_APPLICATION"]);
-			return {"redirectUri" : "https://" + vcapApplication["application_uris"][0] + CALLBACK_URL};
+
+		if(env !== 'development'){
+			config.redirectUri = `https://dtcards.us-south.cf.appdomain.cloud/${CALLBACK_URL}`;
 		}
+
+	} catch (e) {
+		console.log(e);
 	}
 	return config;
 }
