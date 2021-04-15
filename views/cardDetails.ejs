@@ -1,6 +1,15 @@
 <div class="container card-details-view">
     <h1 class="page-title center">Melbourne</h1>
-    <div class="card-details" style="background: #66B96A;">
+    <div class="page-nav-profile">
+        <div class="page-nav-user">
+                <span class="user-icon center">
+                  <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
+               </span>
+            <div class="ml-10">Hello <span id="userNameSpan"></span></div>
+        </div>
+        <a href='/logout'>logout</a>
+    </div>
+    <div class="card-details mt-20" style="background: #66B96A;">
         <div class="card-content" >
             <div class="card-balance">
                 <div class="card-label">Balance</div>
@@ -29,6 +38,7 @@
         <a href="#">Recharge</a>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
 <script>
    JsBarcode("#barcode", "SN0172026032121",{
@@ -36,6 +46,11 @@
     width:1.55,
     height: 30,
     displayValue: false
+   });
+
+   $.getJSON('/home/api/idPayload', function (id_token) {
+       $('#userNameSpan').html(id_token.name);
+       $('#user-icon').attr('src',id_token.picture);
    });
 </script>
 
