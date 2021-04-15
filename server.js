@@ -92,16 +92,9 @@ app.listen(port, () => {
 
 function getAppIDConfig() {
 	let config;
-	let env = process.env.NODE_ENV || 'development';
-	console.log(env,'env')
 	try {
 		// if running locally we'll have the local config file
 		config = require('./localdev-config.json');
-
-		if(env !== 'development'){
-			config.redirectUri = `https://dtcards.us-south.cf.appdomain.cloud/${CALLBACK_URL}`;
-		}
-
 	} catch (e) {
 		console.log(e);
 	}
