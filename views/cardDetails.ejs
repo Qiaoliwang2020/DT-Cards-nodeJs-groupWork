@@ -9,29 +9,29 @@
         </div>
         <a href='/logout'>logout</a>
     </div>
-    <div class="card-details mt-20" style="background: #66B96A;">
+    <div class="card-details mt-20" style="background: <%= cardData[0].cardBackground %>;">
         <div class="card-content" >
             <div class="card-balance">
                 <div class="card-label">Balance</div>
-                <div class="card-amount">25.00</div>
+                <div class="card-amount"><%= cardData[0].balance %></div>
             </div>
             <div class="card-icon">
-                <img src="/assets/icon/melbourne.png" width="35" height="35">
+                <img src="/assets/icon/public-transport.png" width="35" height="35">
             </div>   
         </div>
         <div class="card-number mt-10">
-            SN0172026032121
+            <%= cardData[0]._id %>
         </div>
         <div class="card-barcode">
             <svg id="barcode"></svg>
         </div>
         <div class="card-bottom mt-10">
-            <span>Melbourne</span>
-            <span>EXPIRY 9/24</span>
+            <span> <%= cardData[0].city %></span>
+            <span> expire <%= cardData[0].expire %></span>
         </div>
     </div>
     <div class="create-time mt-20">
-        Create Time: 26/03/2021
+        Create Time:  <%= cardData[0].createTime %>
     </div>
     <div class="opertation-bar mt-20">
         <a href="#">Withdraw</a>
@@ -41,9 +41,10 @@
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
 <script>
-   JsBarcode("#barcode", "SN0172026032121",{
+    let cardNum = $('.card-number').text();
+   JsBarcode("#barcode", cardNum,{
     lineColor: "#000",
-    width:1.55,
+    width:0.5,
     height: 30,
     displayValue: false
    });

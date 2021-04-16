@@ -117,53 +117,57 @@
                 <h4 class="modal-title">Get a new card</h4>
                 <div>
                     <label>Which City’s transport card you want to apply for?</label>
-                    <div class="mt-10"><input id="city" placeholder="eg. Melbourne"/></div>
+                    <div class="mt-10"><input id="city"  type="text" placeholder="eg. Melbourne"/></div>
                 </div>
                 <div>
                     <label class="mb-20">Are you a resident?</label>
                     <div class="mt-10 mb-10">
                         <label>
-                            <input name="yes" type="radio" checked />
+                            <input name="resident" type="radio" value="Yes" />
                             <span>Yes</span>
                         </label>
                         <label class="ml-20">
-                            <input name="no" type="radio" />
+                            <input name="resident" type="radio" value="No" />
                             <span>No</span>
                         </label>
                     </div>
                 </div>
                 <div>
                     <label>Card Holder’s name</label>
-                    <div class="mt-10"><input id="cardHolderName"/></div>
+                    <div class="mt-10"><input  type="text" id="cardHolderName"/></div>
                 </div>
                 <div>
                     <label class="mb-20">Gender</label>
                     <div class="mt-10 mb-10">
                         <label>
-                            <input name="female" type="radio" checked />
+                            <input name="gender" type="radio" value="female" />
                             <span>female</span>
                         </label>
                         <label class="ml-20">
-                            <input name="male" type="radio" />
+                            <input name="gender" type="radio" value="male" />
                             <span>male</span>
                         </label>
                     </div>
                 </div>
                 <div>
+                    <label class="mb-20">Birthday</label>
+                    <input type="text" id="birthday" class="datepicker mt-10">
+                </div>
+                <div>
                     <label class="mb-20">Current Address</label>
-                    <div class="mt-10"><input id="address"/></div>
+                    <div class="mt-10"><input  type="text" id="address"/></div>
                 </div>
                 <div>
                     <label class="mb-20">Email</label>
-                    <div class="mt-10"><input id="email"/></div>
+                    <div class="mt-10"><input  type="text" id="email"/></div>
                 </div>
                 <div>
                     <label class="mb-20">Phone</label>
-                    <div class="mt-10"><input id="phone"/></div>
+                    <div class="mt-10"><input  type="number" id="phone"/></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="button-primary" href="#">Submit</a>
+                <a class="button-primary" id="submit">Submit</a>
             </div>
         </div>
     </div>
@@ -180,7 +184,48 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     $(document).ready(function() {
+        $.get("/cards",(result)=>{
+            $('.cards-list').empty();
+            if(result.length > 0){
+                result.forEach((item)=>{
+                    let cards = `<a href="/card?id=${item._id}" class="card-item" style="background: ${item.cardBackground};">
+                            <div class="card-left">
+                                <div class="card-label">Balance</div>
+                                <div class="card-amount">${item.balance}</div>
+                            </div>
+                            <div class="card-right text-right">
+                           <span class="card-icon">
+                                <img src="/assets/icon/public-transport.png" width="35" height="35">
+                            </span>
+                                <div class="card-location">${item.city}<i class="small material-icons">chevron_right</i></div>
+                            </div>
+                        </a>`
+                    $('.cards-list').append(cards);
+                })
+            }
+            console.log(result)
+        })
         $('#modal-new-card').modal();
+        $('.datepicker').datepicker();
+
+        $('#submit').click(function (){
+           let data={
+               city:$('#city').val(),
+               resident:$("input[name='resident']:checked").val(),
+               cardHolderName:$('#cardHolderName').val(),
+               gender:$("input[name='gender']:checked").val(),
+               birthday:$('#birthday').val(),
+               address:$('#address').val(),
+               email:$('#email').val(),
+               phone:$('#phone').val(),
+           }
+           console.log(data,'data');
+
+           $.post( "/cards/createCard",data,(result) =>{
+               console.log(result)
+           });
+
+        })
     })
 	$.getJSON('/home/api/idPayload', function (id_token) {
 		$('#userNameSpan').html(id_token.name);
@@ -189,6 +234,10 @@
 		$('#email').val(id_token.email);
 		// $('#idTokenPayload').jsonViewer(id_token, {collapsed: false});
 	});
+
+
+
+
 </script>
 
 </body>

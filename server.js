@@ -29,6 +29,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes({client}));
 
+/** IBM APP ID for login and register **/
 app.use(session({
 	secret: "123456",
 	resave: true,
@@ -95,10 +96,9 @@ app.listen(port, () => {
 
 function getAppIDConfig() {
 	let config;
-
 	try {
-		// if running locally we'll have the local config file
 		config = require('./localdev-config.json');
+		// if running locally we'll have the local config file
 		if(process.env.NODE_ENV == 'dev'){
 			config.redirectUri = "http://localhost:8080/ibm/cloud/appid/callback"
 		}

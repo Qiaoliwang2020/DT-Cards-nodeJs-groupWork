@@ -230,6 +230,12 @@ h1.page-title{
 .card-item .card-amount:before{
   content: '$';
 }
+.card-item .card-icon{
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  background: #f2f2f2;
+}
 .card-item .card-location{
   display: flex;
   justify-content: space-between;
@@ -321,6 +327,7 @@ h1.page-title{
   width: 50px;
   height: 50px;
   border-radius: 50px;
+  background-color: #f2f2f2;
 }
 .card-details .card-barcode{
   height: 50px;
