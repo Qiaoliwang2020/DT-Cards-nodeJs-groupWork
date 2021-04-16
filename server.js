@@ -88,7 +88,10 @@ app.get('/error', (req, res) => {
 
 app.listen(port, () => {
 	console.log("Listening on port ", port);
+	console.log(process.env.NODE_ENV)
 });
+
+
 
 function getAppIDConfig() {
 	let config;
@@ -96,7 +99,11 @@ function getAppIDConfig() {
 	try {
 		// if running locally we'll have the local config file
 		config = require('./localdev-config.json');
+		if(process.env.NODE_ENV == 'dev'){
+			config.redirectUri = "http://localhost:8080/ibm/cloud/appid/callback"
+		}
 	} catch (e) {
+		console.log(e)
 	}
 	return config;
 }

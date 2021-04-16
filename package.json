@@ -20,7 +20,8 @@
   },
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "export NODE_ENV=production && nodemon server.js",
+    "dev": "export NODE_ENV=dev && nodemon server.js"
   },
   "repository": {
     "type": "git",
