@@ -97,13 +97,6 @@ function getAppIDConfig() {
 		// if running locally we'll have the local config file
 		config = require('./localdev-config.json');
 	} catch (e) {
-		if (process.env.APPID_SERVICE_BINDING) { // if running on Kubernetes this env variable would be defined
-			config = JSON.parse(process.env.APPID_SERVICE_BINDING);
-			config.redirectUri = process.env.redirectUri;
-		} else { // running on CF
-			let vcapApplication = JSON.parse(process.env["VCAP_APPLICATION"]);
-			return {"redirectUri" : "https://" + vcapApplication["application_uris"][0] + CALLBACK_URL};
-		}
 	}
 	return config;
 }

@@ -7,6 +7,6 @@
   "profilesUrl": "https://us-south.appid.cloud.ibm.com",
   "discoveryEndpoint": "https://us-south.appid.cloud.ibm.com/oauth/v4/79482537-7521-46a3-b73a-077fb787092e/.well-known/openid-configuration",
   "type": "regularwebapp",
-  "redirectUri": "http://localhost:8080/ibm/cloud/appid/callback",
+  "redirectUri": "https://dtcards.us-south.cf.appdomain.cloud/ibm/cloud/appid/callback",
   "scopes": []
 }
