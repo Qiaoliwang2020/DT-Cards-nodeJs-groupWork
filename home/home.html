@@ -27,35 +27,12 @@
                 <span class="user-icon center">
                   <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
                </span>
-               <div class="ml-10">Hello <span id="userNameSpan"></span></div>
+               <div class="ml-10">Hello <span id="userNameSpan" ></span></div>
             </div>
             <a href='/logout'>logout</a>
         </div>
         <div class="cards-list">
-            <a href="/card" class="card-item" style="background: #4EC1F5;">
-                <div class="card-left">
-                    <div class="card-label">Balance</div>
-                    <div class="card-amount">25.00</div>
-                </div>
-                <div class="card-right text-right">
-               <span class="card-icon">
-                    <img src="/assets/icon/sydney-opera-house.png" width="35" height="35">
-                </span>
-                    <div class="card-location">Sydney<i class="small material-icons">chevron_right</i></div>
-                </div>
-            </a>
-            <a href="#" class="card-item" style="background: #66B96A;">
-                <div class="card-left">
-                    <div class="card-label">Balance</div>
-                    <div class="card-amount">25.00</div>
-                </div>
-                <div class="card-right text-right">
-               <span class="card-icon">
-                    <img src="/assets/icon/melbourne.png" width="35" height="35">
-                </span>
-                    <div class="card-location">Melbourne<i class="small material-icons">chevron_right</i></div>
-                </div>
-            </a>
+
         </div>
         <div class="history-list mt-20">
             <div class="list-header"><span class="list-title">History</span> <a href="#">See all</a></div>
@@ -117,7 +94,7 @@
                 <h4 class="modal-title">Get a new card</h4>
                 <div>
                     <label>Which City’s transport card you want to apply for?</label>
-                    <div class="mt-10"><input id="city"   type="text" placeholder="eg. Melbourne"  /></div>
+                    <div class="mt-10"><input id="city"   type="text" placeholder="eg. Melbourne" onblur="invalidValues({city:this.value})"  /></div>
                 </div>
                 <div>
                     <label class="mb-20">Are you a resident?</label>
@@ -185,7 +162,6 @@
 <script>
     $(document).ready(function() {
         $.get("/cards",(result)=>{
-
             $('.cards-list').empty();
 
             if(result.length > 0){
@@ -212,6 +188,7 @@
 
         $('#submit').click(function (){
            let data={
+               userId:$('#userNameSpan').data('userid'),
                city:$('#city').val(),
                resident:$("input[name='resident']:checked").val(),
                cardHolderName:$('#cardHolderName').val(),
@@ -220,16 +197,10 @@
                address:$('#address').val(),
                email:$('#email').val(),
                phone:$('#phone').val(),
-           }
-
+            }
             let invalid = invalidValues(data);
 
-            if(invalid.length > 0){
-                invalid.forEach(((item)=>{
-                    $(`#${item}`).addClass('invalid');
-                    $(`#${item}`).after(`<div style="color: red">${item} is required</div>`)
-                }))
-            }else {
+            if(!invalid){
                 $.post( "/cards/createCard",data,(result) =>{
                     $('#modal-new-card').modal('close');
                     if(result === 'success'){
@@ -238,17 +209,31 @@
                     console.log(result)
                 });
             }
+
         })
     })
     function invalidValues(data){
+        $('.invalid-text').remove();
         let errs = Object.keys(data).filter(function(key, index) {
             return data[key] == '' || data[key] == undefined
         });
 
+        if (errs.length > 0){
+            errs.forEach(((item)=>{
+                $(`#${item}`).addClass('invalid');
+                $(`#${item}`).after(`<div class="invalid-text" style="color: red">${item} is required</div>`)
+            }))
+        }else{
+            let labelName = Object.keys(data)[0];
+            $(`#${labelName}`).removeClass('invalid');
+            $(`#${labelName}`).siblings('.invalid-text').remove();
+            errs = null;
+        }
         return errs;
     }
 	$.getJSON('/home/api/idPayload', function (id_token) {
 		$('#userNameSpan').html(id_token.name);
+        $('#userNameSpan').attr('data-userid',id_token.sub);
 		$('#user-icon').attr('src',id_token.picture);
 		$('#cardHolderName').val(id_token.name)
 		$('#email').val(id_token.email);
