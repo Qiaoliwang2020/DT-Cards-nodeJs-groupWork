@@ -117,11 +117,11 @@
                 <h4 class="modal-title">Get a new card</h4>
                 <div>
                     <label>Which City’s transport card you want to apply for?</label>
-                    <div class="mt-10"><input id="city"  type="text" placeholder="eg. Melbourne"/></div>
+                    <div class="mt-10"><input id="city"   type="text" placeholder="eg. Melbourne"  /></div>
                 </div>
                 <div>
                     <label class="mb-20">Are you a resident?</label>
-                    <div class="mt-10 mb-10">
+                    <div class="mt-10 mb-10" id="resident">
                         <label>
                             <input name="resident" type="radio" value="Yes" />
                             <span>Yes</span>
@@ -138,7 +138,7 @@
                 </div>
                 <div>
                     <label class="mb-20">Gender</label>
-                    <div class="mt-10 mb-10">
+                    <div class="mt-10 mb-10" id="gender">
                         <label>
                             <input name="gender" type="radio" value="female" />
                             <span>female</span>
@@ -171,21 +171,23 @@
             </div>
         </div>
     </div>
-    <div class="bottom-container">
-        <div class="bottom-container-data">
-            <div class="token-title">
-                ID Token
-            </div>
-            <div id="idTokenPayload" class="token-info"></div>
-        </div>
-    </div>
+<!--    <div class="bottom-container">-->
+<!--        <div class="bottom-container-data">-->
+<!--            <div class="token-title">-->
+<!--                ID Token-->
+<!--            </div>-->
+<!--            <div id="idTokenPayload" class="token-info"></div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     $(document).ready(function() {
         $.get("/cards",(result)=>{
+
             $('.cards-list').empty();
+
             if(result.length > 0){
                 result.forEach((item)=>{
                     let cards = `<a href="/card?id=${item._id}" class="card-item" style="background: ${item.cardBackground};">
@@ -202,8 +204,8 @@
                         </a>`
                     $('.cards-list').append(cards);
                 })
+
             }
-            console.log(result)
         })
         $('#modal-new-card').modal();
         $('.datepicker').datepicker();
@@ -219,14 +221,32 @@
                email:$('#email').val(),
                phone:$('#phone').val(),
            }
-           console.log(data,'data');
 
-           $.post( "/cards/createCard",data,(result) =>{
-               console.log(result)
-           });
+            let invalid = invalidValues(data);
 
+            if(invalid.length > 0){
+                invalid.forEach(((item)=>{
+                    $(`#${item}`).addClass('invalid');
+                    $(`#${item}`).after(`<div style="color: red">${item} is required</div>`)
+                }))
+            }else {
+                $.post( "/cards/createCard",data,(result) =>{
+                    $('#modal-new-card').modal('close');
+                    if(result === 'success'){
+                        location.reload();
+                    }
+                    console.log(result)
+                });
+            }
         })
     })
+    function invalidValues(data){
+        let errs = Object.keys(data).filter(function(key, index) {
+            return data[key] == '' || data[key] == undefined
+        });
+
+        return errs;
+    }
 	$.getJSON('/home/api/idPayload', function (id_token) {
 		$('#userNameSpan').html(id_token.name);
 		$('#user-icon').attr('src',id_token.picture);
@@ -234,10 +254,6 @@
 		$('#email').val(id_token.email);
 		// $('#idTokenPayload').jsonViewer(id_token, {collapsed: false});
 	});
-
-
-
-
 </script>
 
 </body>

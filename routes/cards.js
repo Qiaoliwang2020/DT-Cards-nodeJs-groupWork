@@ -25,7 +25,7 @@ module.exports = params => {
         //   const convertedTimeStamp = moment.unix(entry.timeStamp);
         //   entry.timeStamp = moment(convertedTimeStamp).fromNow();
         // }
-        console.log(cardsData,'entry');
+        // console.log(cardsData,'entry');
       })
 
       // return res.render('layout', {
