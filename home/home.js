@@ -4,8 +4,7 @@ $(document).ready(function() {
     $('#modal-new-card').modal();
     $('.datepicker').datepicker();
 
-
-    getCards();
+    getUserInfo();
     getCities();
 
     // submit to add a new card
@@ -31,8 +30,9 @@ $(document).ready(function() {
                 }
             });
         }
-    })
+    });
 })
+
 // value invalid
 invalidValues = (data)=>{
     $('.invalid-text').remove();
@@ -52,8 +52,9 @@ invalidValues = (data)=>{
     }
     return errs;
 }
-getCards =()=>{
-    $.get("/cards",(result)=>{
+getCards =(userId)=>{
+    console.log(userId,'u');
+    $.get(`/cards?userId=${userId}`,(result)=>{
         $('.cards-list').empty();
         if(result.length > 0){
             result.forEach((item)=>{
@@ -156,12 +157,18 @@ getCities =()=>{
         });
     });
 }
-// user info from app id
-$.getJSON('/home/api/idPayload', function (id_token) {
-    $('#userNameSpan').html(id_token.name);
-    $('#userNameSpan').attr('data-userid',id_token.sub);
-    $('#user-icon').attr('src',id_token.picture);
-    $('#cardHolderName').val(id_token.name)
-    $('#email').val(id_token.email);
-    // $('#idTokenPayload').jsonViewer(id_token, {collapsed: false});
-});
+getUserInfo =()=>{
+    // user info from app id
+    $.getJSON('/home/api/idPayload', function (id_token) {
+        $('#userNameSpan').html(id_token.name);
+        $('#userNameSpan').attr('data-userid',id_token.sub);
+        $('#user-icon').attr('src',id_token.picture);
+        $('#cardHolderName').val(id_token.name)
+        $('#email').val(id_token.email);
+
+        getCards(id_token.sub);
+        // $('#idTokenPayload').jsonViewer(id_token, {collapsed: false});
+    });
+}
+
+

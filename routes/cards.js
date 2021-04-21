@@ -15,10 +15,9 @@ module.exports = params => {
   const { client } = params;
 
   router.get("/", async (req, res, next) => {
-
+    let userId = req.query.userId;
     try {
-
-      let cardsData = await client.db("reckoning").collection("cards").find({}).toArray();
+      let cardsData = await client.db("reckoning").collection("cards").find({userId: userId}).toArray();
 
       return  res.json(cardsData);
 
@@ -46,6 +45,7 @@ module.exports = params => {
       return next(err);
     }
   })
+
   function generateDarkColorHex() {
     let color = "#";
     for (let i = 0; i < 3; i++)
