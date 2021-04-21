@@ -7,11 +7,6 @@ $(document).ready(function() {
         height: 30,
         displayValue: false
     });
-    // get user name and user icon from App Id
-    $.getJSON('/home/api/idPayload', function (id_token) {
-        $('#userNameSpan').html(id_token.name);
-        $('#user-icon').attr('src',id_token.picture);
-    });
 
     // get amount
     getAmount=()=>{
