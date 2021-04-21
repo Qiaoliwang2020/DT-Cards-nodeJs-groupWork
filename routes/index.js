@@ -10,11 +10,6 @@ const cardsRoute = require('./cards');
 
 
 module.exports = (params) => {
-    // router.get('/', (req, res) => {
-    //     res.render('layout', {
-    //         template: 'home'
-    //     });
-    // })
     router.use('/test', test());
     router.use('/counter', counterRoute(params));
     router.use('/dashboard', dashboardRoute(params));

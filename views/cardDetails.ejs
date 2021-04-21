@@ -35,23 +35,102 @@
     </div>
     <div class="opertation-bar mt-20">
         <a href="#">Withdraw</a>
-        <a href="#">Recharge</a>
+        <a href="#modal-payment" class="modal-trigger">Recharge</a>
+    </div>
+    <div id="modal-payment" class="modal bottom-sheet">
+        <div class="modal-content">
+            <div class="modal-close-icon modal-close">x</div>
+            <h4 class="modal-title">Payment</h4>
+            <div>
+                <label class="mb-20">Select a plan?</label>
+                <div class="amount-wrap mt-10 mb-10" id="amount">
+                    <label class="amount-label">
+                        <input name="amount" type="radio" value="10" />
+                        <span>$10</span>
+                    </label>
+                    <label class="amount-label">
+                        <input name="amount" type="radio" value="20" />
+                        <span>$20</span>
+                    </label>
+                    <label class="amount-label">
+                        <input name="amount" type="radio" value="30" />
+                        <span>$30</span>
+                    </label>
+                    <label class="amount-label">
+                        <input name="amount" type="radio" value="50" />
+                        <span>$50</span>
+                    </label>
+                    <label class="amount-label">
+                        <input name="amount" type="radio" value="others" />
+                        <span>others</span>
+                    </label>
+                    <div class="other-amount mt-10 hide"><input  type="number" id="othersAmount"  placeholder="enter an amount"  /></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="button-primary" id="pay">Pay now</a>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
 <script>
-    let cardNum = $('.card-number').text();
-   JsBarcode("#barcode", cardNum,{
-    lineColor: "#000",
-    width:0.5,
-    height: 30,
-    displayValue: false
-   });
+    $(document).ready(function() {
+        // generate a bar code for the card by using card number
+        let cardNum =  $('.card-number').text().trim();
+        JsBarcode("#barcode", cardNum,{
+            lineColor: "#000",
+            width:0.5,
+            height: 30,
+            displayValue: false
+        });
+        // get user name and user icon from App Id
+        $.getJSON('/home/api/idPayload', function (id_token) {
+            $('#userNameSpan').html(id_token.name);
+            $('#user-icon').attr('src',id_token.picture);
+        });
 
-   $.getJSON('/home/api/idPayload', function (id_token) {
-       $('#userNameSpan').html(id_token.name);
-       $('#user-icon').attr('src',id_token.picture);
-   });
+
+        // get amount
+        getAmount=()=>{
+            let amount = 0;
+            amount = $("input[name='amount']:checked").val();
+
+            if(amount === 'others'){
+                $('.other-amount').removeClass('hide');
+                amount = $('#othersAmount').val();
+            }else{
+                $('.other-amount').addClass('hide');
+            }
+            return amount;
+        }
+        // when amount change
+        $('#amount').on('change',function (){
+           getAmount();
+        })
+        // when user click to  pay
+        $('#pay').on('click',function (){
+            let amount = getAmount();
+            if(amount){
+                let data ={
+                    cardId : cardNum,
+                    balance:amount,
+                }
+                $.post( "/card/updateBalance",data,(result) =>{
+                   console.log(result,'res');
+                   if(result === 'success'){
+                       $('#modal-payment').modal('close');
+                       location.reload();
+                   }
+                })
+            }else{
+                alert(
+                    "please select or enter an amount"
+                )
+            }
+        })
+    })
+
 </script>
 

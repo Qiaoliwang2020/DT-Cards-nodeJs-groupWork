@@ -121,6 +121,9 @@ h1.home-title{
 .ml-20{
   margin-left: 20px;
 }
+.mr-10{
+  margin-right: 10px;
+}
 .mb-10{
   margin-bottom: 10px;
 }
@@ -133,9 +136,7 @@ h1.home-title{
 .modal{
   height: 95%!important;
 }
-#modal-login .modal-footer,
-#modal-register .modal-footer,
-#modal-new-card .modal-footer{
+.modal .modal-footer{
   text-align: center!important;
 }
 .modal .modal-title{
@@ -381,6 +382,19 @@ h1.page-title{
 }
 .opertation-bar a{
   color:#007AFF;
+}
+.amount-wrap{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.amount-label{
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.amount-wrap .other-amount{
+  flex: 1;
 }
 
 
