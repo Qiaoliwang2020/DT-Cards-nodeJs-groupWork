@@ -70,28 +70,10 @@ app.get('/error', (req, res) => {
 	res.send('Authentication Error');
 });
 
-// app.get("/record", (req, res) => {
-//   const { insectsAmount, areaID } = req.query;
-//   res.send(`Area ${areaID} has ${insectsAmount} insects`);
-// })
-
-
-// app.use((req, res, next) => {
-//   return next(createError(404, "File not found"));
-// })
-
-// app.use((err, req, res, next) => {
-//   const status = err.status || 500;
-//   res.status(status);
-//   res.send(err.message);
-// })
-
-
 app.listen(port, () => {
 	console.log("Listening on port ", port);
-	console.log(process.env.NODE_ENV)
+	//console.log(process.env.NODE_ENV)
 });
-
 
 
 function getAppIDConfig() {
@@ -102,6 +84,7 @@ function getAppIDConfig() {
 		if(process.env.NODE_ENV == 'dev'){
 			config.redirectUri = "http://localhost:8080/ibm/cloud/appid/callback"
 		}
+
 	} catch (e) {
 		console.log(e)
 	}

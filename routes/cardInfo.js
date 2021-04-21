@@ -38,7 +38,7 @@ module.exports = params => {
     let cardData = req.body;
     let cardId = cardData.cardId,
         balance = parseInt(cardData.balance);
-    console.log(typeof balance);
+    //console.log(typeof balance);
     try {
       const card = await client.db("reckoning").collection("cards").updateOne({ _id: ObjectId(cardId)},{
         $inc: { balance: balance },
