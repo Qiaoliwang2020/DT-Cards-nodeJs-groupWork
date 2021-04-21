@@ -1,15 +1,37 @@
-# Green House Repo
+# SIT737
+DT cards:
+a website for people to get and manage their transport cards online.
+--------------------------------------------------------------------------------
 
-# routes folder
-This folder contains all routes of the backend server.
+From a command/shell terminal
+* `cd` into the parent directory you want to install the project in
+* `git clone` the project into a child directory
+* `cd` into that child directory
+* run `npm install` to install dependencies
 
-Each file is one route which may have multiple endpoints.
+For example:
 
-Default landing page ('/' endpoint) is still the `index.html` in public folder.
+    $ cd Projects
+    $ git clone https://github.com/Qiaoliwang2020/DT-Cards-nodeJs.git
 
-## NOTE: The object `client` is the mongodb object can be passed to any routes to interact with the database. The databse name should be 'greenhouse' and collection name is 'test'
 
-# views folder
-This folder contains all ejs files which are the html page rendered from the endpoints.
+        ... git output here ...
 
-The layout folder which contains the `index.ejs` file defining the everything but the body part of the pages (kind of a wrapper of the pages).
+    $ cd DT-Cards-nodeJs
+
+    $ npm install
+
+        ... npm output here ...
+
+
+run locally
+--------------------------------------------------------------------------------
+
+After installing, run the server using
+
+    npm start
+
+This should print the following to the console.
+
+    DT-Cards-nodeJs: server starting on http://localhost:8080
+
