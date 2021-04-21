@@ -34,7 +34,7 @@
         Create Time:  <%= cardData[0].createTime %>
     </div>
     <div class="opertation-bar mt-20">
-        <a href="#">Withdraw</a>
+        <a href="#modal-withdraw" class="modal-trigger">Withdraw</a>
         <a href="#modal-payment" class="modal-trigger">Recharge</a>
     </div>
     <div id="modal-payment" class="modal bottom-sheet">
@@ -72,16 +72,34 @@
             <a class="button-primary" id="pay">Pay now</a>
         </div>
     </div>
+
+    <div id="modal-withdraw" class="modal bottom-sheet">
+        <div class="modal-content">
+            <div class="modal-close-icon modal-close">x</div>
+            <h4 class="modal-title">Withdraw</h4>
+            <div>
+                <label class="mb-20">Enter a number you want withdraw from this card.</label>
+                <div class="mt-10"><input  type="text" id="withdraw-amount" /></div>
+            </div>
+            <div class="withdraw-all-bar">
+                <span>balance:$<b id="totalAmount"><%= cardData[0].balance %></b></span>
+                <a id="withdrawAll">Withdraw all</a>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="button-primary" id="withdraw">Withdraw now</a>
+        </div>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
 <script>
     $(document).ready(function() {
-        // generate a bar code for the card by using card number
+        // generate a bar code for the card with card number
         let cardNum =  $('.card-number').text().trim();
         JsBarcode("#barcode", cardNum,{
             lineColor: "#000",
-            width:0.5,
+            width:1,
             height: 30,
             displayValue: false
         });
@@ -90,7 +108,6 @@
             $('#userNameSpan').html(id_token.name);
             $('#user-icon').attr('src',id_token.picture);
         });
-
 
         // get amount
         getAmount=()=>{
@@ -129,6 +146,32 @@
                     "please select or enter an amount"
                 )
             }
+        })
+        // when user click withdraw all
+        $('#withdrawAll').on('click',function (){
+            let amount = $('#totalAmount').text();
+            $('#withdraw-amount').val(amount);
+        })
+        // when user click to withdraw
+        $('#withdraw').on('click',function (){
+           let amount = $('#withdraw-amount').val();
+           if(amount){
+               let data ={
+                   cardId : cardNum,
+                   balance:-amount,
+               }
+               $.post( "/card/updateBalance",data,(result) =>{
+                   console.log(result,'res');
+                   if(result === 'success'){
+                       $('#modal-payment').modal('close');
+                       location.reload();
+                   }
+               })
+           }else{
+               alert(
+                   "please enter an amount"
+               )
+           }
         })
     })
 

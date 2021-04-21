@@ -172,12 +172,15 @@
 <script>
     $(document).ready(function() {
 
+        // initialization modal and datepicker
         $('#modal-new-card').modal();
         $('.datepicker').datepicker();
+
 
         getCards();
         getCities();
 
+        // submit to add a new card
         $('#submit').click(function (){
            let data={
                userId:$('#userNameSpan').data('userid'),
@@ -202,12 +205,12 @@
             }
         })
     })
+   // value invalid
    invalidValues = (data)=>{
         $('.invalid-text').remove();
         let errs = Object.keys(data).filter(function(key, index) {
             return data[key] == '' || data[key] == undefined
         });
-
         if (errs.length > 0){
             errs.forEach(((item)=>{
                 $(`#${item}`).addClass('invalid');
@@ -240,6 +243,8 @@
                         </a>`
                     $('.cards-list').append(cards);
                 })
+            }else{
+                $('.cards-list').append('<div class="no-data">No cards here. <a class="modal-trigger" href="#modal-new-card">Get one</a></div>')
             }
         })
     }
@@ -323,6 +328,7 @@
             });
         });
     }
+    // user info from app id
 	$.getJSON('/home/api/idPayload', function (id_token) {
 		$('#userNameSpan').html(id_token.name);
         $('#userNameSpan').attr('data-userid',id_token.sub);

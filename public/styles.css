@@ -396,5 +396,16 @@ h1.page-title{
 .amount-wrap .other-amount{
   flex: 1;
 }
+.withdraw-all-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+.no-data{
+  text-align: center;
+  color: #999;
+  margin-top: 20px;
+}
 
 

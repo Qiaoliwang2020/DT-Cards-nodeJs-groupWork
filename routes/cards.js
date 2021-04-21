@@ -20,18 +20,6 @@ module.exports = params => {
 
       let cardsData = await client.db("reckoning").collection("cards").find({}).toArray();
 
-      cardsData.forEach(entry => {
-        // if (entry.timeStamp) {
-        //   const convertedTimeStamp = moment.unix(entry.timeStamp);
-        //   entry.timeStamp = moment(convertedTimeStamp).fromNow();
-        // }
-        // console.log(cardsData,'entry');
-      })
-
-      // return res.render('layout', {
-      //   template: 'cardDetails',
-      //   cardsData
-      // })
       return  res.json(cardsData);
 
     } catch (err) {
@@ -41,7 +29,6 @@ module.exports = params => {
 
   });
   router.post("/createCard", async (req, res, next) => {
-
     let cardData = req.body;
     let color = generateDarkColorHex();
     cardData.balance = 0,
