@@ -53,11 +53,12 @@ $(document).ready(function() {
     })
     // when user click to withdraw
     $('#withdraw').on('click',function (){
-        let amount = $('#withdraw-amount').val();
-        if(amount){
+        let withdrawAmount = $('#withdraw-amount').val();
+        let balance = $('#totalAmount').text();
+        if(withdrawAmount && parseInt(balance) >= parseInt(withdrawAmount)){
             let data ={
                 cardId : cardNum,
-                balance:-amount,
+                balance:-withdrawAmount,
             }
             $.post( "/card/updateBalance",data,(result) =>{
                 console.log(result,'res');
@@ -68,7 +69,7 @@ $(document).ready(function() {
             })
         }else{
             alert(
-                "please enter an amount"
+                "please check your balance"
             )
         }
     })
