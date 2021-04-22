@@ -81,7 +81,7 @@ function getAppIDConfig() {
 		config = require('./localdev-config.json');
 		// if running locally we'll have the local config file
 		if(process.env.NODE_ENV == 'dev'){
-			config.redirectUri = "http://localhost:8080/ibm/cloud/appid/callback"
+			config.redirectUri = config.devRedirectUri;
 		}
 	} catch (e) {
 		console.log(e)

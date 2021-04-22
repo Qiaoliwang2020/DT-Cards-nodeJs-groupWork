@@ -167,7 +167,6 @@ getUserInfo =()=>{
         $('#email').val(id_token.email);
 
         getCards(id_token.sub);
-        // $('#idTokenPayload').jsonViewer(id_token, {collapsed: false});
     });
 }
 
