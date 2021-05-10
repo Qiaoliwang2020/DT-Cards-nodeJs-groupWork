@@ -9,8 +9,8 @@
     <div class="payment-details">
         <div class="center">
             <img src="/assets/icon/payment-method.png" width="55">
-            <p class="text-cap-all text-gray">Paying</p>
-            <p class="text-light-black">GDT Cards - <%= cardData[0].city %></p>
+            <p id="transaction-type" class="text-cap-all text-gray">recharge</p>
+            <p id="business-name" class="text-light-black">DT Cards - <%= cardData[0].city %></p>
             <p class="pay-amount" data-id="<%= cardData[0]._id %>"><%= parseFloat(cardData.price).toFixed(2) %></p>
         </div>
     </div>
@@ -22,18 +22,10 @@
         <button type="button" class="button-primary" onClick="window.elementsModal.toggleElementsModalVisibility();">Pay now</button>
     </div>
     <div class="demo completed-view hidden">
-        <h2>KAVHOLM</h2>
+        <h2>DT Cards - <%= cardData[0].city %></h2>
         <div class="success-message">
             <div class="success-text">
-                Your test payment was successful. <br />Complete the order by using
-                the
-                <a
-                        href="https://stripe.com/docs/payments/payment-intents/quickstart#fulfillment"
-                >payment_intent.succeeded webhook</a
-                >.
-            </div>
-            <div>
-                <a class="replay" href="/">Replay demo</a>
+                Your test payment was successful.
             </div>
         </div>
     </div>
@@ -42,20 +34,21 @@
 <script src="https://js.stripe.com/v3/"></script>
 <script src="/stripePay.js"></script>
 <script>
-    window.elementsModal.create({
-        // the modal demo will handle non-zero currencies automatically
-        // items sent into the server can calculate their amounts and send back to the client
-        items: { price: 30, quantity: 1 },
-        // Supported currencies here https://stripe.com/docs/currencies#presentment-currencies
-        currency: "usd",
-        businessName: "KAVHOLM",
-        productName: "Chair",
-        customerEmail: "me@kavholm.com",
-        customerName: "Customer Kavholm"
-    });
-    // Remove the comment for this to automatically open the modal demo
-    // when the page is loaded
-    window.elementsModal.toggleElementsModalVisibility();
+    let transaction_type = $('#transaction-type').text().trim();
+    let amount = parseInt($('.pay-amount').text().trim());
+    let business_name = $('#business-name').text();
 
+    $.getJSON('/home/api/idPayload', function (id_token) {
+        window.elementsModal.create({
+            items: { price: amount, quantity: 1,type:transaction_type },
+            currency: "aud",
+            businessName:business_name,
+            productName: transaction_type,
+            customerEmail: id_token.email,
+            customerName:id_token.name
+        });
+        // when the page is loaded
+        window.elementsModal.toggleElementsModalVisibility();
+    });
 </script>
 

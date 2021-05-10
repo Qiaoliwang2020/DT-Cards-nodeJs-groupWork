@@ -376,7 +376,7 @@
               </div>
               <!-- Edit your terms and conditions here   -->
               <div class="footer ElementsModal--footer-text">
-                By purchasing this chair, you agree to KAVHOLM’s
+                By purchasing this ${content.productName}, you agree to ${content.businessName}’s
                 <a class="ElementsModal--footer-text" href="stripe.com"
                   >Terms and Conditions.</a
                 >
@@ -486,7 +486,7 @@
                         // it to close the browser payment method collection interface.
                         ev.complete("success");
                         // Check if payment has fully succeeded and no futher action is needed
-                        if (confirmResult.paymentIntent.status === "succeeded") return stripePaymentHandler();
+                        if (confirmResult.paymentIntent.status === "succeeded") return stripePaymentHandler(confirmResult);
                         // Otherwise, let Stripe.js handle the rest of the payment flow (eg. 3DS authentication is required).
                         _elementsModal_stripe
                             .confirmCardPayment(paymentIntent.client_secret)
@@ -499,7 +499,7 @@
                                     displayError.textContent = result.error.message;
                                 } else {
                                     // The payment has succeeded.
-                                    stripePaymentHandler();
+                                    stripePaymentHandler(confirmResult);
                                 }
                             });
                     }
@@ -559,7 +559,7 @@
                         var displayError = document.getElementById("card-errors");
                         displayError.textContent = result.error.message;
                     } else {
-                        stripePaymentHandler();
+                        stripePaymentHandler(result);
                     }
                 });
         });
@@ -567,7 +567,8 @@
 
     // Implement logic to handle the users authorization for payment.
     // Here you will want to redirect to a successful payments page, or update the page.
-    function stripePaymentHandler() {
+    function stripePaymentHandler(result) {
+        console.log(result,'resssss');
         toggleElementsModalVisibility();
         document.querySelectorAll(".payment-view").forEach(function(view) {
             view.classList.add("hidden");
