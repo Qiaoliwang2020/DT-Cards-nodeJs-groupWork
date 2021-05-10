@@ -16,59 +16,12 @@ body {
 main {
   flex: 1 0 auto;
 }
-label.active {
-  color: #2c0235;
-  font-weight: bold;
-  font-size: large;
-}
-
-.recordForm {
-  margin-top: 11.25px;
-}
-
-#addButton-container {
-  height: 317.531px;
-  margin-top: 7.5px;
-  margin-bottom: 15px;
-}
-
-#addButton {
-  top: 40%;
-  background-color: #9E65A9;
-}
-
 .modal {
   height: 50%
-}
-.preloader-wrapper {
-  position: absolute;
-	top:0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-  	
-	margin: auto;
 }
 
 a.hover {
   cursor: pointer;
-}
-
-.card-content {
-  color: black;
-}
-
-#podName_span {
-  font-size: 18px;
-}
-
-#insectsAmount_span {
-  font-size: 30px;
-}
-
-#insect-icon {
-  margin-top: 20px;
-  font-size: 30px;
 }
 /*
  *  add by qiaoli wang
@@ -94,8 +47,8 @@ h1.home-title{
 }
 .button-primary{
   display: inline-block;
-  width: 340px;
-  max-width: 90%;
+  width: 100%;
+  max-width: 100%;
   height: 50px;
   line-height: 50px;
   text-align: center;
@@ -133,11 +86,22 @@ h1.home-title{
 .text-right{
   text-align: right;
 }
+.text-gray{
+  color: #8E8E93;
+}
+.text-light-black{
+  color: #333333;
+}
+.text-cap-all{
+  text-transform: uppercase;
+}
 .modal{
   height: 95%!important;
 }
-.modal .modal-footer{
-  text-align: center!important;
+.modal .modal-footer {
+  text-align: center !important;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 .modal .modal-title{
   font-size: 18px;
@@ -164,6 +128,9 @@ h1.home-title{
   border-top-left-radius: 20px!important;
   border-top-right-radius: 20px !important;
   max-height: 95%!important;
+}
+#modal-payment.bottom-sheet{
+  max-height: 45%!important;
 }
 .modal-content{
   position: relative;
@@ -407,5 +374,14 @@ h1.page-title{
   color: #999;
   margin-top: 20px;
 }
+.payment-details .pay-amount{
+  font-size: 60px;
+  margin: 0px;
+}
+.pay-amount:before{
+  content: "$";
+}
+
+
 
 

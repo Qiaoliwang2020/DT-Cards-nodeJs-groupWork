@@ -53,7 +53,7 @@ invalidValues = (data)=>{
     return errs;
 }
 getCards =(userId)=>{
-    console.log(userId,'u');
+
     $.get(`/cards?userId=${userId}`,(result)=>{
         $('.cards-list').empty();
         if(result.length > 0){

@@ -1,0 +1,61 @@
+<div class="container card-details-view">
+    <h1 class="page-title center">Payment</h1>
+    <div class="page-nav-profile">
+        <div class="page-nav-user">
+
+        </div>
+        <a href='/home/home.html'>Cancel</a>
+    </div>
+    <div class="payment-details">
+        <div class="center">
+            <img src="/assets/icon/payment-method.png" width="55">
+            <p class="text-cap-all text-gray">Paying</p>
+            <p class="text-light-black">GDT Cards - <%= cardData[0].city %></p>
+            <p class="pay-amount" data-id="<%= cardData[0]._id %>"><%= parseFloat(cardData.price).toFixed(2) %></p>
+        </div>
+    </div>
+    <div>
+        <div class="mt-10"><input  type="text" id="note" placeholder="Add a note"/></div>
+    </div>
+
+    <div class="center mt-30">
+        <button type="button" class="button-primary" onClick="window.elementsModal.toggleElementsModalVisibility();">Pay now</button>
+    </div>
+    <div class="demo completed-view hidden">
+        <h2>KAVHOLM</h2>
+        <div class="success-message">
+            <div class="success-text">
+                Your test payment was successful. <br />Complete the order by using
+                the
+                <a
+                        href="https://stripe.com/docs/payments/payment-intents/quickstart#fulfillment"
+                >payment_intent.succeeded webhook</a
+                >.
+            </div>
+            <div>
+                <a class="replay" href="/">Replay demo</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/stripePay.js"></script>
+<script>
+    window.elementsModal.create({
+        // the modal demo will handle non-zero currencies automatically
+        // items sent into the server can calculate their amounts and send back to the client
+        items: { price: 30, quantity: 1 },
+        // Supported currencies here https://stripe.com/docs/currencies#presentment-currencies
+        currency: "usd",
+        businessName: "KAVHOLM",
+        productName: "Chair",
+        customerEmail: "me@kavholm.com",
+        customerName: "Customer Kavholm"
+    });
+    // Remove the comment for this to automatically open the modal demo
+    // when the page is loaded
+    window.elementsModal.toggleElementsModalVisibility();
+
+</script>
+

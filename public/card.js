@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     // generate a bar code for the card with card number
     let cardNum =  $('.card-number').text().trim();
     JsBarcode("#barcode", cardNum,{
@@ -27,19 +28,15 @@ $(document).ready(function() {
     })
     // when user click to  pay
     $('#pay').on('click',function (){
+
         let amount = getAmount();
+
         if(amount){
-            let data ={
-                cardId : cardNum,
-                balance:amount,
-            }
-            $.post( "/card/updateBalance",data,(result) =>{
-                console.log(result,'res');
-                if(result === 'success'){
-                    $('#modal-payment').modal('close');
-                    location.reload();
-                }
-            })
+
+            $('#modal-payment').modal('close');
+
+            window.location.href= `/payment?id=${cardNum}&amount=${amount}`;
+
         }else{
             alert(
                 "please select or enter an amount"
@@ -73,4 +70,6 @@ $(document).ready(function() {
             )
         }
     })
+
+
 })
