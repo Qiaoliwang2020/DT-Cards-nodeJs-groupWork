@@ -52,7 +52,7 @@ $(document).ready(function() {
     $('#withdraw').on('click',function (){
         let withdrawAmount = $('#withdraw-amount').val();
         let balance = $('#totalAmount').text();
-        if(withdrawAmount && parseInt(balance) >= parseInt(withdrawAmount)){
+        if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
             let data ={
                 cardId : cardNum,
                 balance:-withdrawAmount,

@@ -1,6 +1,7 @@
 (function() {
     var _elementsModal_stripe;
     var _elementsModal_HOST_URL = "";
+    var _elementsBackground_color = $('.payment-details').data('color')
 
     function init(content, paymentIntent) {
         var amount = calculateDisplayAmountFromCurrency(paymentIntent);
@@ -8,7 +9,7 @@
         modal.className = "ElementsModal--modal";
         modal.innerHTML = `
       <div class="ElementsModal--modal-content">
-      <div class="ElementsModal--top-banner">
+      <div class="ElementsModal--top-banner" style="background: ${_elementsBackground_color}">
         <div class="ElementsModal--sales-info">
           <div class="ElementsModal--top">
             <div class="ElementsModal--company">${content.businessName ||
@@ -568,14 +569,34 @@
     // Implement logic to handle the users authorization for payment.
     // Here you will want to redirect to a successful payments page, or update the page.
     function stripePaymentHandler(result) {
-        console.log(result,'resssss');
+
+        let data = result.paymentIntent;
+
         toggleElementsModalVisibility();
+
         document.querySelectorAll(".payment-view").forEach(function(view) {
             view.classList.add("hidden");
         });
+
         document.querySelectorAll(".completed-view").forEach(function(view) {
+
             view.classList.remove("hidden");
+
+            let createTime = data.create;
+            $('#suc-amount').text((data.amount/100).toFixed(2));
+            $('#receipt-no').text("Receipt No: "+  moment(createTime).format("ddd-MMYY-hms"));
+            $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
         });
+
+        let card ={
+            cardId:$('#payment-amount').data('id'),
+            balance:data.amount/100
+        }
+        $.post( "/card/updateBalance",card,(res) =>{
+            if(res === 'success'){
+                location.href = "/home/home.html";
+            }
+        })
     }
 
     // Allows the user to dismiss the Elements modal when using the esc key

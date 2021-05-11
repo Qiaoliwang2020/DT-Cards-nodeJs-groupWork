@@ -89,7 +89,6 @@ getCities =()=>{
         },
         success: function(msg) {
             token = msg.auth_token;
-            console.log(msg.auth_token,'token');
             $.ajax({
                 type: "GET",
                 url: "https://www.universal-tutorial.com/api/countries/",
@@ -127,7 +126,7 @@ getCities =()=>{
                 })
                 $('#state').append(`<option value="" disabled selected>Select a state</option>`);
                 states.forEach((item)=>{
-                    console.log(item);
+                    // console.log(item);
                     $('#state').append(`<option value='${item}'>${item}</option>`)
                 })
                 //console.log(states);

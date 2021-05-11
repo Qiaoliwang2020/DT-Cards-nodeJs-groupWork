@@ -19,6 +19,7 @@ checkEnv();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 let calculateOrderAmount = (item)=>{
+    console.log(item.price)
     return item.price * 100
 };
 module.exports = params => {

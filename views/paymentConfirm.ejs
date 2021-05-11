@@ -1,31 +1,31 @@
 <div class="container card-details-view">
     <h1 class="page-title center">Payment</h1>
-    <div class="page-nav-profile">
-        <div class="page-nav-user">
-
+    <div class="payment-view">
+        <div class="page-nav-profile">
+            <div class="page-nav-user"></div>
+            <a href='/home/home.html'>Cancel</a>
         </div>
-        <a href='/home/home.html'>Cancel</a>
-    </div>
-    <div class="payment-details">
-        <div class="center">
-            <img src="/assets/icon/payment-method.png" width="55">
-            <p id="transaction-type" class="text-cap-all text-gray">recharge</p>
-            <p id="business-name" class="text-light-black">DT Cards - <%= cardData[0].city %></p>
-            <p class="pay-amount" data-id="<%= cardData[0]._id %>"><%= parseFloat(cardData.price).toFixed(2) %></p>
+        <div class="payment-details" data-color="<%= cardData[0].cardBackground %>">
+            <div class="center">
+                <img src="/assets/icon/payment-method.png" width="55">
+                <p id="transaction-type" class="text-cap-all text-gray">recharge</p>
+                <p id="business-name" class="text-light-black">DT Cards - <%= cardData[0].city %></p>
+                <p id="payment-amount" class="pay-amount" data-id="<%= cardData[0]._id %>"><%= parseFloat(cardData.price).toFixed(2) %></p>
+            </div>
+        </div>
+
+        <div class="center mt-30">
+            <button type="button" class="button-primary" onClick="window.elementsModal.toggleElementsModalVisibility();">Pay now</button>
         </div>
     </div>
-    <div>
-        <div class="mt-10"><input  type="text" id="note" placeholder="Add a note"/></div>
-    </div>
-
-    <div class="center mt-30">
-        <button type="button" class="button-primary" onClick="window.elementsModal.toggleElementsModalVisibility();">Pay now</button>
-    </div>
-    <div class="demo completed-view hidden">
-        <h2>DT Cards - <%= cardData[0].city %></h2>
-        <div class="success-message">
-            <div class="success-text">
-                Your test payment was successful.
+    <div class="completed-view hidden">
+        <div class="payment-details">
+            <div class="center">
+                <img src="/assets/icon/check.png" width="100">
+                <p id="suc-amount" class="pay-amount success"></p>
+                <p class="text-light-black">Recharge for DT Cards - <%= cardData[0].city %></p>
+                <p id="receipt-no" class="text-light-black">Receipt No: N0378743767</p>
+                <p id="create-time" class="text-light-black"></p>
             </div>
         </div>
     </div>
@@ -35,12 +35,13 @@
 <script src="/stripePay.js"></script>
 <script>
     let transaction_type = $('#transaction-type').text().trim();
-    let amount = parseInt($('.pay-amount').text().trim());
+    let amount = parseFloat($('.pay-amount').text());
+    let cardId = $('#payment-amount').data('id');
     let business_name = $('#business-name').text();
 
     $.getJSON('/home/api/idPayload', function (id_token) {
         window.elementsModal.create({
-            items: { price: amount, quantity: 1,type:transaction_type },
+            items: { price: amount, quantity: 1,type:transaction_type, },
             currency: "aud",
             businessName:business_name,
             productName: transaction_type,

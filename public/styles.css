@@ -381,6 +381,9 @@ h1.page-title{
 .pay-amount:before{
   content: "$";
 }
+.pay-amount.success{
+  font-size: 35px;
+}
 
 
 
