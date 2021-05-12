@@ -11,6 +11,7 @@ $(document).ready(function() {
     $('#submit').click(function (){
         let data={
             userId:$('#userNameSpan').data('userid'),
+            country:$('#country').val() ? $('#country').val() : null,
             city:$('#city').val() ? $('#city').val() : $('#state').val(),
             resident:$("input[name='resident']:checked").val(),
             cardHolderName:$('#cardHolderName').val(),

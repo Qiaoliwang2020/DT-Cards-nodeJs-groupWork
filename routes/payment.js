@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 const ObjectId = require('mongodb').ObjectId;
-
+const cc = require('currency-codes');
 const router = express.Router();
 
 // bodyParse setup
@@ -44,10 +44,18 @@ module.exports = params => {
 
     });
    // for stripe pay
+    router.get("/currencies", (req, res) => {
+       let currencies = cc;
+        try{
+           return res.status(200).json({message:'success', currencies});
+       }
+       catch (err) {
+           return res.status(500).json({ error: err.message });
+       }
+    });
     router.get("/public-key", (req, res) => {
         res.send({publicKey: process.env.STRIPE_PUBLISHABLE_KEY});
     });
-
     router.post("/payment_intents", async (req, res) => {
         let { currency, items } = req.body;
         try {
@@ -61,20 +69,18 @@ module.exports = params => {
         }
     });
 
-    router.post("/payment_refund", async (req, res) => {
-        let { currency, items } = req.body;
-        try {
-            const payout = await stripe.payouts.create({
-                amount: items.amount,
-                currency: currency,
-            });
-            return res.status(200).json(payout);
-        } catch (err) {
-            return res.status(500).json({ error: err.message });
-        }
-    });
-
-
+    // router.post("/payment_refund", async (req, res) => {
+    //     let { currency, items } = req.body;
+    //     try {
+    //         const payout = await stripe.payouts.create({
+    //             amount: items.amount,
+    //             currency: currency,
+    //         });
+    //         return res.status(200).json(payout);
+    //     } catch (err) {
+    //         return res.status(500).json({ error: err.message });
+    //     }
+    // });
 
    // Webhook handler for asynchronous events.
     router.post("/webhook", async (req, res) => {

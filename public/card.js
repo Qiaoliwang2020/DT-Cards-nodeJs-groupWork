@@ -8,16 +8,15 @@ $(document).ready(function() {
         height: 30,
         displayValue: false
     });
-
     // get amount
-    getAmount=()=>{
+    let getAmount = () => {
         let amount = 0;
         amount = $("input[name='amount']:checked").val();
 
-        if(amount === 'others'){
+        if (amount === 'others') {
             $('.other-amount').removeClass('hide');
             amount = $('#othersAmount').val();
-        }else{
+        } else {
             $('.other-amount').addClass('hide');
         }
         return amount;
@@ -71,5 +70,32 @@ $(document).ready(function() {
         }
     })
 
+    // get currencies
+    let getCurrencies = () => {
 
+        $('#currency').empty();
+
+        $.get("/payment/currencies", (result) => {
+
+           if(result.message == 'success'){
+               let data = result.currencies.data;
+               let currencies = data.map(elem => ({
+                   currency: elem.currency,
+                   code: elem.code
+               }));
+               currencies.forEach((item)=>{
+                   let currency = `<option value="${item.code}">${item.currency} - ${item.code}</option>`
+                   $('#currency').append(currency);
+               })
+               let selected = $('#currency').data('currency');
+               selectElement('currency',selected)
+           }
+        })
+    }
+    getCurrencies();
+
+    let selectElement =(id, valueToSelect)=> {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
 })

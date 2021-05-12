@@ -40,7 +40,12 @@
     <div id="modal-payment" class="modal bottom-sheet">
         <div class="modal-content">
             <div class="modal-close-icon modal-close">x</div>
-            <h4 class="modal-title">Select a plan</h4>
+            <h4 class="modal-title mb-20">Payment</h4>
+            <p class="">Select a Currency</p>
+            <div class="mt-20 mb-20">
+                <select id="currency"  class="select-css mb-10" data-currency="<%= cardData[0].currency[0].code %>"></select>
+            </div>
+            <p class="">Select a Plan</p>
             <div>
                 <div class="amount-wrap mt-10 mb-10" id="amount">
                     <label class="amount-label">
@@ -92,7 +97,5 @@
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.3/dist/JsBarcode.all.min.js"></script>
 <script src="/card.js"></script>
-<script>
 
-</script>
 
