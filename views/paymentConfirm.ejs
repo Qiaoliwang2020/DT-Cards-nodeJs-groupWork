@@ -5,12 +5,12 @@
             <div class="page-nav-user"></div>
             <a href='/home/home.html'>Cancel</a>
         </div>
-        <div class="payment-details" data-color="<%= cardData[0].cardBackground %>">
+        <div class="payment-details" data-color="<%= paymentData[0].cardBackground %>">
             <div class="center">
                 <img src="/assets/icon/payment-method.png" width="55">
-                <p id="transaction-type" class="text-cap-all text-gray">recharge</p>
-                <p id="business-name" class="text-light-black">DT Cards - <%= cardData[0].city %></p>
-                <p id="payment-amount" class="pay-amount" data-id="<%= cardData[0]._id %>"><%= parseFloat(cardData.price).toFixed(2) %></p>
+                <p id="transaction-type" data-currency ="<%= paymentData.currency.toLowerCase() %>"  class="text-cap-all text-gray">recharge</p>
+                <p id="business-name" class="text-light-black" data-country="<%= paymentData[0].country %>">DT Cards(<%= paymentData[0].country %>) - <%= paymentData[0].city %> </p>
+                <p id="payment-amount" class="pay-amount" data-id="<%= paymentData[0]._id %>"><%= parseFloat(paymentData.price).toFixed(2) %></p>
             </div>
         </div>
 
@@ -23,14 +23,18 @@
             <div class="center">
                 <img src="/assets/icon/check.png" width="100">
                 <p id="suc-amount" class="pay-amount success"></p>
-                <p class="text-light-black">Recharge for DT Cards - <%= cardData[0].city %></p>
+                <p class="text-light-black">Recharge for DT Cards(<%= paymentData[0].country %>) - <%= paymentData[0].city %></p>
                 <p id="receipt-no" class="text-light-black">Receipt No: N0378743767</p>
                 <p id="create-time" class="text-light-black"></p>
             </div>
         </div>
+        <div class="center mt-30">
+            <a href="/home/home.html" class="button-primary" >Home</a>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+<script src="/libraries/money.min.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="/stripePay.js"></script>
 <script>
@@ -38,11 +42,12 @@
     let amount = parseFloat($('.pay-amount').text());
     let cardId = $('#payment-amount').data('id');
     let business_name = $('#business-name').text();
+    let currency = $('#transaction-type').data('currency');
 
     $.getJSON('/home/api/idPayload', function (id_token) {
         window.elementsModal.create({
             items: { price: amount, quantity: 1,type:transaction_type, },
-            currency: "aud",
+            currency: currency,
             businessName:business_name,
             productName: transaction_type,
             customerEmail: id_token.email,

@@ -1,26 +1,13 @@
 $(document).ready(function() {
 
-    // generate a bar code for the card with card number
     let cardNum =  $('.card-number').text().trim();
-    JsBarcode("#barcode", cardNum,{
-        lineColor: "#000",
-        width:1,
-        height: 30,
-        displayValue: false
-    });
-    // get amount
-    let getAmount = () => {
-        let amount = 0;
-        amount = $("input[name='amount']:checked").val();
+    let defaultCurrency =  $('#currency').data('currency');
 
-        if (amount === 'others') {
-            $('.other-amount').removeClass('hide');
-            amount = $('#othersAmount').val();
-        } else {
-            $('.other-amount').addClass('hide');
-        }
-        return amount;
-    }
+    // generate bar code for the card
+    generateBarCode(cardNum);
+
+    getCurrencies(defaultCurrency);
+
     // when amount change
     $('#amount').on('change',function (){
         getAmount();
@@ -31,11 +18,9 @@ $(document).ready(function() {
         let amount = getAmount();
 
         if(amount){
-
             $('#modal-payment').modal('close');
-
-            window.location.href= `/payment?id=${cardNum}&amount=${amount}`;
-
+            let cur = $('#currency').val()
+            window.location.href= `/payment?id=${cardNum}&amount=${amount}&currency=${cur}`;
         }else{
             alert(
                 "please select or enter an amount"
@@ -69,33 +54,53 @@ $(document).ready(function() {
             )
         }
     })
-
-    // get currencies
-    let getCurrencies = () => {
-
-        $('#currency').empty();
-
-        $.get("/payment/currencies", (result) => {
-
-           if(result.message == 'success'){
-               let data = result.currencies.data;
-               let currencies = data.map(elem => ({
-                   currency: elem.currency,
-                   code: elem.code
-               }));
-               currencies.forEach((item)=>{
-                   let currency = `<option value="${item.code}">${item.currency} - ${item.code}</option>`
-                   $('#currency').append(currency);
-               })
-               let selected = $('#currency').data('currency');
-               selectElement('currency',selected)
-           }
-        })
-    }
-    getCurrencies();
-
-    let selectElement =(id, valueToSelect)=> {
-        let element = document.getElementById(id);
-        element.value = valueToSelect;
-    }
 })
+
+// generate a bar code for the card with card number
+generateBarCode =(cardNumber)=>{
+    JsBarcode("#barcode", cardNumber,{
+        lineColor: "#000",
+        width:1,
+        height: 30,
+        displayValue: false
+    });
+}
+// get currencies
+getCurrencies = (defaultCurrency) => {
+
+    $('#currency').empty();
+
+    $.get("/payment/currencies", (result) => {
+
+        if(result.message == 'success'){
+            let data = result.currencies.data;
+            let currencies = data.map(elem => ({
+                currency: elem.currency,
+                code: elem.code
+            }));
+            currencies.forEach((item)=>{
+                let currency = `<option value="${item.code}">${item.currency} - ${item.code}</option>`
+                $('#currency').append(currency);
+            })
+            selectElement('currency',defaultCurrency)
+        }
+    })
+}
+
+selectElement =(id, valueToSelect)=> {
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
+// get amount
+getAmount = () => {
+    let amount = 0;
+    amount = $("input[name='amount']:checked").val();
+
+    if (amount === 'others') {
+        $('.other-amount').removeClass('hide');
+        amount = $('#othersAmount').val();
+    } else {
+        $('.other-amount').addClass('hide');
+    }
+    return amount;
+}

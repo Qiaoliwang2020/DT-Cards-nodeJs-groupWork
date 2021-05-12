@@ -27,14 +27,15 @@ module.exports = params => {
 
     router.get("/", async (req, res, next) => {
 
-        let cardId = req.query.id,amount = req.query.amount;
+        let cardId = req.query.id,amount = req.query.amount,currency = req.query.currency;
 
         try {
-            let cardData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId)}).toArray();
-            cardData.price =  amount
+            let paymentData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId)}).toArray();
+            paymentData.price =  amount
+            paymentData.currency = currency
             return res.render('layout', {
                 template: 'paymentConfirm',
-                cardData
+                paymentData
             })
 
         } catch (err) {

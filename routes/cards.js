@@ -22,7 +22,7 @@ module.exports = params => {
       return  res.json(cardsData);
 
     } catch (err) {
-      console.log("Error on dashboard enpoint", err);
+      console.log("Error on cards enpoint", err);
       return next(err);
     }
 
@@ -47,7 +47,7 @@ module.exports = params => {
       return res.status(200).send({message:"success"})
 
     } catch (err) {
-      console.log("Error when create new area", err);
+      console.log("Error when create new card", err);
       return next(err);
     }
   })

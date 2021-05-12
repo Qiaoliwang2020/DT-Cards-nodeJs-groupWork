@@ -26,7 +26,7 @@ module.exports = params => {
       })
 
     } catch (err) {
-      console.log("Error on dashboard enpoint", err);
+      console.log("Error on card detail enpoint", err);
       return next(err);
     }
 
@@ -45,7 +45,7 @@ module.exports = params => {
       return res.status(200).send("success")
 
     } catch (err) {
-      console.log("Error when create new area", err);
+      console.log("Error when update card Balance", err);
       return next(err);
     }
   });
