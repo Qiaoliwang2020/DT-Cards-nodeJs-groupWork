@@ -19,9 +19,9 @@ checkEnv();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 let calculateOrderAmount = (item)=>{
-    console.log(item.price)
     return item.price * 100
 };
+
 module.exports = params => {
     const {client} = params;
 
@@ -61,10 +61,20 @@ module.exports = params => {
         }
     });
 
-    router.get("/payment_intent_succeeded", (req, res) => {
-        const path = resolve(`/paymentSuccess.html/payment_succeeded.html`);
-        res.sendFile(path);
+    router.post("/payment_refund", async (req, res) => {
+        let { currency, items } = req.body;
+        try {
+            const payout = await stripe.payouts.create({
+                amount: items.amount,
+                currency: currency,
+            });
+            return res.status(200).json(payout);
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
     });
+
+
 
    // Webhook handler for asynchronous events.
     router.post("/webhook", async (req, res) => {
@@ -98,6 +108,9 @@ module.exports = params => {
             res.sendStatus(200);
         }
     });
+
+
+
     return router;
 }
 
