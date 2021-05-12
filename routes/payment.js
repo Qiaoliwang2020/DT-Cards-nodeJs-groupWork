@@ -70,18 +70,19 @@ module.exports = params => {
         }
     });
 
-    // router.post("/payment_refund", async (req, res) => {
-    //     let { currency, items } = req.body;
-    //     try {
-    //         const payout = await stripe.payouts.create({
-    //             amount: items.amount,
-    //             currency: currency,
-    //         });
-    //         return res.status(200).json(payout);
-    //     } catch (err) {
-    //         return res.status(500).json({ error: err.message });
-    //     }
-    // });
+    router.post("/payment_refund", async (req, res) => {
+        let { amount,currency } = req.body;
+        console.log(parseFloat(amount))
+        try {
+            const payout = await stripe.payouts.create({
+                amount: Math.round(parseFloat(amount) * 100),
+                currency: currency,
+            });
+            return res.status(200).json(payout);
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    });
 
    // Webhook handler for asynchronous events.
     router.post("/webhook", async (req, res) => {

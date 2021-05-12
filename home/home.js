@@ -26,7 +26,7 @@ $(document).ready(function() {
         if(!invalid){
             $.post( "/cards/createCard",data,(result) =>{
                 $('#modal-new-card').modal('close');
-                if(result === 'success'){
+                if(result.message == "success"){
                     location.reload();
                 }
             });

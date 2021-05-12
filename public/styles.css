@@ -374,6 +374,10 @@ h1.page-title{
   color: #999;
   margin-top: 20px;
 }
+.modal.small{
+  height: 200px!important;
+  top: 30%!important;
+}
 .payment-details .pay-amount{
   font-size: 60px;
   margin: 0px;

@@ -51,6 +51,21 @@ module.exports = params => {
       return next(err);
     }
   })
+  router.post("/deleteCard", async (req, res, next) => {
+
+    let {cardId} = req.body;
+
+    //console.log(typeof balance);
+    try {
+      const card = await client.db("reckoning").collection("cards").deleteOne( { "_id" : ObjectId(cardId) } )
+      // console.log(card);
+      return res.status(200).send("success")
+
+    } catch (err) {
+      console.log("Error when update card Balance", err);
+      return next(err);
+    }
+  })
 
   function generateDarkColorHex() {
     let color = "#";

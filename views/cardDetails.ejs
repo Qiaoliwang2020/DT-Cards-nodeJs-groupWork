@@ -13,7 +13,7 @@
         <div class="card-content" >
             <div class="card-balance">
                 <div class="card-label">Balance</div>
-                <div class="card-amount"><%= cardData[0].balance %></div>
+                <div id="cardBalance" class="card-amount"><%= cardData[0].balance %></div>
             </div>
             <div class="card-icon">
                 <img src="/assets/icon/public-transport.png" width="35" height="35">
@@ -34,7 +34,7 @@
         Create Time:  <%= cardData[0].createTime %>
     </div>
     <div class="opertation-bar mt-20">
-        <a href="#modal-withdraw" class="modal-trigger">Withdraw</a>
+        <a id="withdrawAction" style="color: <%= cardData[0].balance == 0?"red":"" %>"><%= cardData[0].balance  > 0 ? "Withdraw": "Delete" %></a>
         <a href="#modal-payment" class="modal-trigger">Recharge</a>
     </div>
     <div id="modal-payment" class="modal bottom-sheet">
@@ -88,9 +88,26 @@
                 <span>balance:$<b id="totalAmount"><%= cardData[0].balance %></b></span>
                 <a id="withdrawAll">Withdraw all</a>
             </div>
+            <div class="checkbox-remove-card mt-20">
+                <label>
+                    <input type="checkbox" />
+                    <span>Remove this Transportation card</span>
+                </label>
+            </div>
         </div>
         <div class="modal-footer">
             <a class="button-primary" id="withdraw">Withdraw now</a>
+        </div>
+    </div>
+    <!-- confirm to remove card -->
+    <div id="removeCardNotification" class="modal small modal-fixed-footer">
+        <div class="modal-content">
+            <h4 class="center">Confirm</h4>
+            <p>Your card (<%= cardData[0].city %>) will remove from DT Cards system.</p>
+        </div>
+        <div class="modal-footer">
+            <button id="disagreeRemove" class="waves-effect waves-green btn-flat">Disagree</button>
+            <button id="agreeRemove" class="waves-effect waves-green btn-flat">Agree</button>
         </div>
     </div>
 </div>
