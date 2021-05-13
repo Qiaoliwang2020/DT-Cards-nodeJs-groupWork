@@ -45,7 +45,20 @@ $(document).ready(function() {
         let cardBalance = parseFloat($('#cardBalance').text())
         if(cardBalance > 0){
             // withdraw
+            let cardPayId = $('#withdraw').data('pid')
+            let data ={
+                cardId :cardNumber,
+                payId :cardPayId
+            };
             M.Modal.getInstance($('#modal-withdraw')).open();
+            $.get('/payment/paymentInfo',data,function (res){
+                if(res.data.length >0){
+                    let result = res.data[0];
+                    $('#currencyAmount').attr('data-amount',result.amount/100);
+                    $('#currencyAmount').attr('data-pid',result.id);
+                    $('#currencyAmount').text(`${result.currency.toUpperCase()} ${result.amount/100}`);
+                }
+            })
         }
         else {
             let data ={
@@ -72,7 +85,7 @@ $(document).ready(function() {
     })
     // when user click withdraw all
     $('#withdrawAll').on('click',function (){
-        let amount = $('#totalAmount').text();
+        let amount =  $('#currencyAmount').data('amount');
         $('#withdraw-amount').val(amount);
     })
     // when user agree the withdraw notification
@@ -82,68 +95,57 @@ $(document).ready(function() {
     })
     // when user click to withdraw
     $('#withdraw').on('click',function (){
-        let paymentInfo ={}
+        let paymentInfo ={
+            amount : $('#currencyAmount').data('amount'),
+            id:$('#currencyAmount').data('pid'),
+        }
         let withdrawAmount = $('#withdraw-amount').val();
-        let balance = $('#totalAmount').text();
-        let cardPayId = $('#withdraw').data('pid')
-        let data ={
-            cardId :cardNumber,
-            payId :cardPayId
-        };
-        $.get('/payment/paymentInfo',data,function (res){
-            try{
-                if(res.data.length >0){
-                    paymentInfo = res.data[0]
 
-                    if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
+        try{
+            if(withdrawAmount && parseFloat(paymentInfo.amount) >= parseFloat(withdrawAmount)){
 
-                        let refund = {
-                            amount:withdrawAmount,
-                            payment_id: paymentInfo.id
-                        }
-                        // create a refund
-                        $.ajax({
-                            type: "POST",
-                            url: "/payment/payment_refund",
-                            data: refund,
-                            success: function(result) {
-                                let refundInfo = result.data;
-                                let createTime = refundInfo.create;
-                                let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
-
-                                $('#modal-payment').modal('close');
-                                $('.currency-code').text(refundInfo.currency)
-                                $('#suc-amount').text((refundInfo.amount/100).toFixed(2));
-                                $('#receipt-no').text("Receipt No: "+  receiptNumber);
-                                $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
-
-                                $('.completed-view').removeClass('hidden');
-                                $('.card-view').addClass('hidden');
-
-                                refundInfo.cardId = cardNumber;
-                                refundInfo.receiptNumber = receiptNumber;
-                                refundInfo.type = "withdraw";
-                                addPaymentInfo(refundInfo);
-                            },
-                            error: function(err){
-                                M.toast({html: err.responseJSON.error,displayLength: Infinity, classes: 'red dark-1'});
-                            },
-                            complete:function (){
-                                M.Modal.getInstance($('#modal-withdraw')).close();
-                            }
-                        });
-                    }else{
-                        M.toast({html: 'please check your balance!', classes: 'red dark-1'});
-                    }
-                }else{
-                    M.toast({html: '"please check your balance',  classes: 'red dark-1'});
+                let refund = {
+                    amount:withdrawAmount,
+                    payment_id: paymentInfo.id
                 }
-            }
-            catch (err){
-                console.log(err)
-            }
+                // create a refund
+                $.ajax({
+                    type: "POST",
+                    url: "/payment/payment_refund",
+                    data: refund,
+                    success: function(result) {
+                        let refundInfo = result.data;
+                        let createTime = refundInfo.create;
+                        let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
 
-        })
+                        $('#modal-payment').modal('close');
+                        $('.currency-code').text(refundInfo.currency)
+                        $('#suc-amount').text((refundInfo.amount/100).toFixed(2));
+                        $('#receipt-no').text("Receipt No: "+  receiptNumber);
+                        $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
+
+                        $('.completed-view').removeClass('hidden');
+                        $('.card-view').addClass('hidden');
+
+                        refundInfo.cardId = cardNumber;
+                        refundInfo.receiptNumber = receiptNumber;
+                        refundInfo.type = "withdraw";
+                        addPaymentInfo(refundInfo);
+                    },
+                    error: function(err){
+                        M.toast({html: err.responseJSON.error,displayLength: Infinity, classes: 'red dark-1'});
+                    },
+                    complete:function (){
+                        M.Modal.getInstance($('#modal-withdraw')).close();
+                    }
+                });
+            }else{
+                M.toast({html: 'please check your balance!', classes: 'red dark-1'});
+            }
+        }
+        catch (err){
+            console.log(err)
+        }
     })
 })
 

@@ -111,9 +111,14 @@
                 <div class="mt-10"><input  type="text" id="withdraw-amount" /></div>
             </div>
             <div class="withdraw-all-bar">
-                <span>balance:$<b id="totalAmount"><%= cardData[0].balance.toFixed(2) %></b></span>
+                <span>
+                    balance:A$<b id="totalAmount"><%= cardData[0].balance.toFixed(2) %></b>
+                </span>
                 <a id="withdrawAll">Withdraw all</a>
             </div>
+            <p class="text-light-black">
+                You can withdraw <b id="currencyAmount" class="red-text dark-1"></b> this time.
+            </p>
             <p class="text-gray mt-30">
                 Withdraws can be sent back only to the original payment method used in a charge. It’s not possible to send a refund to a different destination (e.g., another card or bank account).
             </p>
