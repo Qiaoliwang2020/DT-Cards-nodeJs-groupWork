@@ -35,11 +35,13 @@ module.exports = params => {
 
     let cardData = req.body;
     let cardId = cardData.cardId,
+        payId = cardData.payId,
         balance = parseFloat(cardData.balance);
-    //console.log(typeof balance);
+
     try {
       const card = await client.db("reckoning").collection("cards").updateOne({ _id: ObjectId(cardId)},{
         $inc: { balance: balance },
+        $set: { payId: payId }
       });
       // console.log(card);
       return res.status(200).send("success")

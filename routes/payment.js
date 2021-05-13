@@ -88,7 +88,7 @@ module.exports = params => {
         let paymentIntent = req.body;
         try {
             const payment = await client.db("reckoning").collection("payments").insertOne(paymentIntent);
-            return res.status(200).json({message: "success"});
+            return res.status(200).json({message: "success",data:{payId:payment.insertedId}});
 
         } catch (err) {
             return res.status(500).json({ error: err.message });
@@ -96,9 +96,9 @@ module.exports = params => {
     });
 
     router.get("/paymentInfo", async (req, res) => {
-        let {cardId} = req.query;
+        let {cardId,payId} = req.query;
         try {
-            const payment = await client.db("reckoning").collection("payments").find({ cardId: cardId}).toArray();
+            const payment = await client.db("reckoning").collection("payments").find({ cardId: cardId,_id:ObjectId(payId)}).toArray();
             return res.status(200).json({data:payment});
 
         } catch (err) {

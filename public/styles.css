@@ -59,6 +59,9 @@ h1.home-title{
   border:0px;
   cursor: pointer;
 }
+.button-primary:disabled{
+  background: #8E8E93;
+}
 .mt-10{
   margin-top: 10px;
 }

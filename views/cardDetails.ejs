@@ -1,42 +1,60 @@
 <div class="container card-details-view">
-    <h1 class="page-title center"><%= cardData[0].city %></h1>
-    <div class="page-nav-profile">
-        <div class="page-nav-user">
+    <div class="card-view">
+        <h1 class="page-title center"><%= cardData[0].city %></h1>
+        <div class="page-nav-profile">
+            <div class="page-nav-user">
                 <span class="user-icon center">
                   <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
                </span>
-            <div class="ml-10" id="userName">Hello <span id="userNameSpan"></span></div>
-        </div>
-        <a href='/home/home.html'>back</a>
-    </div>
-    <div class="card-details mt-20" style="background: <%= cardData[0].cardBackground %>;">
-        <div class="card-content" >
-            <div class="card-balance">
-                <div class="card-label">Balance</div>
-                <div id="cardBalance" class="card-amount"><%= cardData[0].balance %></div>
+                <div class="ml-10" id="userName">Hello <span id="userNameSpan"></span></div>
             </div>
-            <div class="card-icon">
-                <img src="/assets/icon/public-transport.png" width="35" height="35">
-            </div>   
+            <a href='/home/home.html'>back</a>
         </div>
-        <div class="card-number mt-10">
-            <%= cardData[0]._id %>
+        <div class="card-details mt-20" style="background: <%= cardData[0].cardBackground %>;">
+            <div class="card-content" >
+                <div class="card-balance">
+                    <div class="card-label">Balance</div>
+                    <div id="cardBalance" class="card-amount"><%= cardData[0].balance %></div>
+                </div>
+                <div class="card-icon">
+                    <img src="/assets/icon/public-transport.png" width="35" height="35">
+                </div>
+            </div>
+            <div class="card-number mt-10">
+                <%= cardData[0]._id %>
+            </div>
+            <div class="card-barcode">
+                <svg id="barcode"></svg>
+            </div>
+            <div class="card-bottom mt-10">
+                <span> <%= cardData[0].city %></span>
+                <span> expire <%= cardData[0].expire %></span>
+            </div>
         </div>
-        <div class="card-barcode">
-            <svg id="barcode"></svg>
+        <div class="create-time mt-20">
+            Create Time:  <%= cardData[0].createTime %>
         </div>
-        <div class="card-bottom mt-10">
-            <span> <%= cardData[0].city %></span>
-            <span> expire <%= cardData[0].expire %></span>
+        <div class="opertation-bar mt-20">
+            <a id="withdrawAction" style="color: <%= cardData[0].balance == 0?"red":"" %>"><%= cardData[0].balance  > 0 ? "Withdraw": "Delete" %></a>
+            <a href="#modal-payment" class="modal-trigger">Recharge</a>
         </div>
     </div>
-    <div class="create-time mt-20">
-        Create Time:  <%= cardData[0].createTime %>
+    <div class="completed-view hidden">
+        <h1 class="page-title center">Withdraw</h1>
+        <div class="payment-details">
+            <div class="center">
+                <img src="/assets/icon/check.png" width="100">
+                <p id="suc-amount" class="pay-amount success"></p>
+                <p class="text-light-black">Withdraw from DT Cards(<%= cardData[0].country %>) - <%= cardData[0].city %></p>
+                <p id="receipt-no" class="text-light-black">Receipt No: N0378743767</p>
+                <p id="create-time" class="text-light-black"></p>
+            </div>
+        </div>
+        <div class="center mt-30">
+            <a href="/home/home.html" class="button-primary" >Home</a>
+        </div>
     </div>
-    <div class="opertation-bar mt-20">
-        <a id="withdrawAction" style="color: <%= cardData[0].balance == 0?"red":"" %>"><%= cardData[0].balance  > 0 ? "Withdraw": "Delete" %></a>
-        <a href="#modal-payment" class="modal-trigger">Recharge</a>
-    </div>
+
     <div id="modal-payment" class="modal bottom-sheet">
         <div class="modal-content">
             <div class="modal-close-icon modal-close">x</div>
@@ -88,9 +106,18 @@
                 <span>balance:$<b id="totalAmount"><%= cardData[0].balance %></b></span>
                 <a id="withdrawAll">Withdraw all</a>
             </div>
+            <p class="text-gray mt-30">
+                Withdraws can be sent back only to the original payment method used in a charge. It’s not possible to send a refund to a different destination (e.g., another card or bank account).
+            </p>
+            <div class="text-right">
+                <label>
+                    <input id="withdrawAgree" type="checkbox" />
+                    <span>Agree</span>
+                </label>
+            </div>
         </div>
         <div class="modal-footer">
-            <a class="button-primary" id="withdraw">Withdraw now</a>
+            <button disabled class="button-primary" id="withdraw" data-pid="<%= cardData[0].payId %>">Withdraw now</button>
         </div>
     </div>
     <!-- confirm to remove card -->

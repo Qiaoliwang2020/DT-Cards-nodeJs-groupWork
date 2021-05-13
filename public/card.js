@@ -62,14 +62,20 @@ $(document).ready(function() {
         let amount = $('#totalAmount').text();
         $('#withdraw-amount').val(amount);
     })
+    // when user agree the withdraw notification
+    $('#withdrawAgree').on('change',function (value){
+        let  agreeCheck = $('#withdrawAgree').is(':checked');
+        $('#withdraw').attr('disabled', !agreeCheck)
+    })
     // when user click to withdraw
     $('#withdraw').on('click',function (){
-
         let paymentInfo ={}
         let withdrawAmount = $('#withdraw-amount').val();
         let balance = $('#totalAmount').text();
+        let cardPayId = $('#withdraw').data('pid')
         let data ={
-            cardId :cardNumber
+            cardId :cardNumber,
+            payId :cardPayId
         };
         $.get('/payment/paymentInfo',data,function (res){
             try{
@@ -77,36 +83,46 @@ $(document).ready(function() {
                     paymentInfo = res.data[0]
 
                     if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
+
                         let refund = {
                             amount:withdrawAmount,
                             payment_id: paymentInfo.id
                         }
                         // create a refund
-                        $.post( "/payment/payment_refund",refund,(result) =>{
-
-                            if(result.message == "success"){
-
+                        $.ajax({
+                            type: "POST",
+                            url: "/payment/payment_refund",
+                            data: refund,
+                            success: function(result) {
                                 let refundInfo = result.data;
-                                refundInfo.cardId = cardNumber;
-                                refundInfo.type = "withdraw";
+                                let createTime = refundInfo.create;
+                                let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
 
-                                let cardInfo = {
-                                    cardId:cardNumber,
-                                    balance:-withdrawAmount,
-                                }
-                                addPaymentInfo(refundInfo)
-                                updateBalance(cardInfo)
+                                $('#modal-payment').modal('close');
+                                $('#suc-amount').text((refundInfo.amount/100).toFixed(2));
+                                $('#receipt-no').text("Receipt No: "+  receiptNumber);
+                                $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
+
+                                $('.completed-view').removeClass('hidden');
+                                $('.card-view').addClass('hidden');
+
+                                refundInfo.cardId = cardNumber;
+                                refundInfo.receiptNumber = receiptNumber;
+                                refundInfo.type = "withdraw";
+                                addPaymentInfo(refundInfo);
+                            },
+                            error: function(err){
+                                M.toast({html: err.responseJSON.error,displayLength: Infinity, classes: 'red dark-1'});
+                            },
+                            complete:function (){
+                                M.Modal.getInstance($('#modal-withdraw')).close();
                             }
-                        })
+                        });
                     }else{
-                        alert(
-                            "please check your balance"
-                        )
+                        M.toast({html: 'please check your balance!', classes: 'red dark-1'});
                     }
                 }else{
-                    alert(
-                        "please check your balance"
-                    )
+                    M.toast({html: '"please check your balance',  classes: 'red dark-1'});
                 }
             }
             catch (err){
@@ -170,14 +186,26 @@ getAmount = () => {
 updateBalance =(data)=>{
     $.post( "/card/updateBalance",data,(result) =>{
             if(result === 'success'){
-                $('#modal-payment').modal('close');
-                location.reload();
+
+                //location.reload();
             }
      })
 }
 // add payment record to database
 addPaymentInfo = (data)=>{
+    let payId = '';
+    let withdrawAmount = data.amount/100;
+    let cardId =  data.cardId;
+
     $.post('/payment/addPaymentTransaction',data,function (res) {
-        console.log(res);
+        if(res.message == "success"){
+            payId = res.data.payId;
+            let cardInfo = {
+                cardId:cardId,
+                balance:-withdrawAmount,
+                payId: payId
+            }
+            updateBalance(cardInfo)
+        }
     })
 }

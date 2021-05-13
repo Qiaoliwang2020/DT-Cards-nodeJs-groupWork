@@ -39,6 +39,7 @@ module.exports = params => {
     cardData.expire = moment().add(1, 'years').calendar();
     cardData.cardBackground = color;
     cardData.currency = currency;
+    cardData.payId = '';
 
     try {
 

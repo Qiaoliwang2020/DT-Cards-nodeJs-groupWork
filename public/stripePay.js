@@ -345,24 +345,29 @@
             view.classList.remove("hidden");
 
             let createTime = data.create;
+            let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
+            data.cardId = $('#payment-amount').data('id');
+            data.receiptNumber = receiptNumber;
+            data.type ="recharge";
+
             $('#suc-amount').text((data.amount/100).toFixed(2));
-            $('#receipt-no').text("Receipt No: "+  moment(createTime).format("ddd-MMYY-hms"));
+            $('#receipt-no').text("Receipt No: "+ receiptNumber);
             $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
         });
 
-        let card ={
-            cardId:$('#payment-amount').data('id'),
-            balance:data.amount/100,
-        }
-        $.post( "/card/updateBalance",card,(res) =>{
-            if(res !== 'success'){
-               console.log(res);
-            }
-        })
-        data.cardId = $('#payment-amount').data('id');
-        data.type ="recharge";
+        // add payment record to database
         $.post('/payment/addPaymentTransaction',data,function (res) {
-            console.log(res);
+            if(res.message == "success"){
+                let payId = res.data.payId;
+                let cardInfo = {
+                    cardId:data.cardId,
+                    balance:data.amount/100,
+                    payId: payId
+                }
+                $.post( "/card/updateBalance",cardInfo,(result) =>{
+                   console.log(result,'up');
+                })
+            }
         })
     }
 
@@ -449,4 +454,5 @@
             currency: paymentIntent.currency
         });
     }
+
 })();
