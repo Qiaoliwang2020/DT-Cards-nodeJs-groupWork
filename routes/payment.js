@@ -44,7 +44,7 @@ module.exports = params => {
         }
 
     });
-   // for stripe pay
+
     router.get("/currencies", (req, res) => {
        let currencies = cc;
         try{
@@ -54,21 +54,7 @@ module.exports = params => {
            return res.status(500).json({ error: err.message });
        }
     });
-    router.get("/public-key", (req, res) => {
-        res.send({publicKey: process.env.STRIPE_PUBLISHABLE_KEY});
-    });
-    router.post("/payment_intents", async (req, res) => {
-        let { currency, items } = req.body;
-        try {
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: calculateOrderAmount(items),
-                currency
-            });
-            return res.status(200).json(paymentIntent);
-        } catch (err) {
-            return res.status(500).json({ error: err.message });
-        }
-    });
+
 
     router.post("/payment_refund", async (req, res) => {
         let { amount,payment_id } = req.body;
@@ -105,7 +91,22 @@ module.exports = params => {
             return res.status(500).json({ error: err.message });
         }
     });
-
+    // stripe pay
+    router.get("/public-key", (req, res) => {
+        res.send({publicKey: process.env.STRIPE_PUBLISHABLE_KEY});
+    });
+    router.post("/payment_intents", async (req, res) => {
+        let { currency, items } = req.body;
+        try {
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: calculateOrderAmount(items),
+                currency
+            });
+            return res.status(200).json(paymentIntent);
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    });
    // Webhook handler for asynchronous events.
     router.post("/webhook", async (req, res) => {
         // Check if webhook signing is configured.

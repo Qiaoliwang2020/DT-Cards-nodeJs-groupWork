@@ -358,11 +358,13 @@
         // add payment record to database
         $.post('/payment/addPaymentTransaction',data,function (res) {
             if(res.message == "success"){
+                console.log(data,res,'res')
                 let payId = res.data.payId;
                 let cardInfo = {
                     cardId:data.cardId,
                     balance:data.amount/100,
-                    payId: payId
+                    payId: payId,
+                    currency:data.currency
                 }
                 $.post( "/card/updateBalance",cardInfo,(result) =>{
                    console.log(result,'up');

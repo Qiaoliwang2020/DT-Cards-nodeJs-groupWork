@@ -203,7 +203,8 @@ addPaymentInfo = (data)=>{
             let cardInfo = {
                 cardId:cardId,
                 balance:-withdrawAmount,
-                payId: payId
+                payId: payId,
+                currency:data.currency
             }
             updateBalance(cardInfo)
         }
