@@ -190,7 +190,7 @@
                     if(paymentIntent.error){
                         M.toast({html: paymentIntent.error,displayLength: Infinity,classes: 'red darken-1'})
                     }
-                    console.log(paymentIntent,'[aymentIntent')
+                    // console.log(paymentIntent,'[aymentIntent')
                     return paymentIntent;
                 });
         }
@@ -358,6 +358,11 @@
             if(res !== 'success'){
                console.log(res);
             }
+        })
+        data.cardId = $('#payment-amount').data('id');
+        data.type ="recharge";
+        $.post('/payment/addPaymentTransaction',data,function (res) {
+            console.log(res);
         })
     }
 

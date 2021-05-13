@@ -68,25 +68,26 @@ $(document).ready(function() {
         let withdrawAmount = $('#withdraw-amount').val();
         let balance = $('#totalAmount').text();
         if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
-            // let data = {
-            //     amount:withdrawAmount,
-            //     currency: defaultCurrency
-            // }
-            //
-            // $.post( "/payment/payment_refund",data,(result) =>{
-            //     console.log(result,'res');
-            // })
-            let data ={
-                cardId : cardNumber,
-                balance:-withdrawAmount,
+            let data = {
+                amount:withdrawAmount,
+                currency: defaultCurrency
             }
-            $.post( "/card/updateBalance",data,(result) =>{
+
+            $.post( "/payment/payment_refund",data,(result) =>{
                 console.log(result,'res');
-                if(result === 'success'){
-                    $('#modal-payment').modal('close');
-                    location.reload();
-                }
             })
+
+            // let data ={
+            //     cardId : cardNumber,
+            //     balance:-withdrawAmount,
+            // }
+            // $.post( "/card/updateBalance",data,(result) =>{
+            //     console.log(result,'res');
+            //     if(result === 'success'){
+            //         $('#modal-payment').modal('close');
+            //         location.reload();
+            //     }
+            // })
         }else{
             alert(
                 "please check your balance"

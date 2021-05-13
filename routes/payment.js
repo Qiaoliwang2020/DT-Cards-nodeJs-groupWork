@@ -74,11 +74,22 @@ module.exports = params => {
         let { amount,currency } = req.body;
         console.log(parseFloat(amount))
         try {
-            const payout = await stripe.payouts.create({
+            const refund = await stripe.refunds.create({
                 amount: Math.round(parseFloat(amount) * 100),
-                currency: currency,
+                payment_intent: 'pi_Aabcxyz01aDfoo',
             });
-            return res.status(200).json(payout);
+            return res.status(200).json(refund);
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    });
+
+    router.post("/addPaymentTransaction", async (req, res) => {
+        let paymentIntent = req.body;
+        try {
+            const payment = await client.db("reckoning").collection("payments").insertOne(paymentIntent);
+            return res.status(200).json(paymentIntent);
+
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
