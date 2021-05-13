@@ -62,7 +62,7 @@ getCards =(userId)=>{
                 let cards = `<a href="/card?id=${item._id}" class="card-item" style="background: ${item.cardBackground};">
                             <div class="card-left">
                                 <div class="card-label">Balance</div>
-                                <div class="card-amount">${item.balance}</div>
+                                <div class="card-amount">${item.balance.toFixed(2)}</div>
                             </div>
                             <div class="card-right text-right">
                            <span class="card-icon">

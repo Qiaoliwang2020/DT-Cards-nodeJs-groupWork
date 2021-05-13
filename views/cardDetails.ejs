@@ -14,7 +14,7 @@
             <div class="card-content" >
                 <div class="card-balance">
                     <div class="card-label">Balance</div>
-                    <div id="cardBalance" class="card-amount"><%= cardData[0].balance %></div>
+                    <div id="cardBalance" class="card-amount"><%= cardData[0].balance.toFixed(2) %></div>
                 </div>
                 <div class="card-icon">
                     <img src="/assets/icon/public-transport.png" width="35" height="35">
@@ -44,7 +44,10 @@
         <div class="payment-details">
             <div class="center">
                 <img src="/assets/icon/check.png" width="100">
-                <p id="suc-amount" class="pay-amount success"></p>
+                <div class="currency-amount">
+                    <p class="currency-code"></p>
+                    <p id="suc-amount" class="pay-amount success"></p>
+                </div>
                 <p class="text-light-black">Withdraw from DT Cards(<%= cardData[0].country %>) - <%= cardData[0].city %></p>
                 <p id="receipt-no" class="text-light-black">Receipt No: N0378743767</p>
                 <p id="create-time" class="text-light-black"></p>
@@ -88,6 +91,11 @@
                     </label>
                     <div class="other-amount mt-10 hide"><input  type="number" id="othersAmount"  placeholder="enter an amount"  /></div>
                 </div>
+                <div class="text-gray">
+                    The default currency of DT Cards is AUD. we will convert your currency to AUD then Update the DT card's balance.
+                    <a id="check-exchangeRate">check exchange rate</a>
+                </div>
+                <div class="show-currency red-text center"></div>
             </div>
         </div>
         <div class="modal-footer">
@@ -103,7 +111,7 @@
                 <div class="mt-10"><input  type="text" id="withdraw-amount" /></div>
             </div>
             <div class="withdraw-all-bar">
-                <span>balance:$<b id="totalAmount"><%= cardData[0].balance %></b></span>
+                <span>balance:$<b id="totalAmount"><%= cardData[0].balance.toFixed(2) %></b></span>
                 <a id="withdrawAll">Withdraw all</a>
             </div>
             <p class="text-gray mt-30">

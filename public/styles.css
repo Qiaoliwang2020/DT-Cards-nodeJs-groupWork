@@ -29,6 +29,7 @@ a.hover {
 */
 a{
   color: #007AFF;
+  cursor: pointer;
 }
 .brand-logo{
   text-align: center;
@@ -133,7 +134,7 @@ h1.home-title{
   max-height: 95%!important;
 }
 #modal-payment.bottom-sheet{
-  max-height: 55%!important;
+  max-height: 65%!important;
 }
 .modal-content{
   position: relative;
@@ -227,7 +228,7 @@ h1.page-title{
   font-size: 34px;
 }
 .card-item .card-amount:before{
-  content: '$';
+  content: 'A$';
 }
 .card-item .card-icon{
   width: 35px;
@@ -319,7 +320,7 @@ h1.page-title{
   font-size: 24px;
 }
 .card-balance .card-amount::before{
-  content: '$';
+  content: 'AUD$';
 }
 .card-details .card-icon, 
 .card-details .card-icon img{
@@ -364,7 +365,7 @@ h1.page-title{
   margin-bottom: 10px;
 }
 .amount-wrap .other-amount{
-  flex: 1;
+  width: 100%;
 }
 .withdraw-all-bar{
   display: flex;
@@ -385,11 +386,18 @@ h1.page-title{
   font-size: 60px;
   margin: 0px;
 }
-.pay-amount:before{
-  content: "$";
-}
 .pay-amount.success{
   font-size: 35px;
+}
+.currency-amount{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.currency-amount .currency-code{
+  font-size: 20px;
+  margin-right: 10px;
+  text-transform: uppercase;
 }
 
 

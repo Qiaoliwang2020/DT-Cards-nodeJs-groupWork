@@ -11,6 +11,21 @@ $(document).ready(function() {
     $('#amount').on('change',function (){
         getAmount();
     })
+    // check exhange rate
+    $('#check-exchangeRate').on('click',function (){
+        let amount = getAmount();
+        let currency = $('#currency').val()
+        let data={
+            balance :amount,
+            currency:currency
+        }
+        if(amount){
+            convertCurrency(data)
+        }
+        else{
+            M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
+        }
+    })
     // when user click to  pay
     $('#pay').on('click',function (){
 
@@ -21,9 +36,7 @@ $(document).ready(function() {
             let cur = $('#currency').val()
             window.location.href= `/payment?id=${cardNumber}&amount=${amount}&currency=${cur}`;
         }else{
-            alert(
-                "please select or enter an amount"
-            )
+            M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
         }
     })
     // withdraw action
@@ -99,6 +112,7 @@ $(document).ready(function() {
                                 let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
 
                                 $('#modal-payment').modal('close');
+                                $('.currency-code').text(refundInfo.currency)
                                 $('#suc-amount').text((refundInfo.amount/100).toFixed(2));
                                 $('#receipt-no').text("Receipt No: "+  receiptNumber);
                                 $('#create-time').text(moment(createTime).format("dddd, MMMM Do YYYY, h:mm:ss a"));
@@ -207,6 +221,14 @@ addPaymentInfo = (data)=>{
                 currency:data.currency
             }
             updateBalance(cardInfo)
+        }
+    })
+}
+convertCurrency =(data)=>{
+
+    $.post('/payment/convertCurrency',data,function (res){
+        if(res.message == 'success'){
+            $('.show-currency').text(`${data.currency} ${data.balance} = ${res.currency} ${res.balance}`);
         }
     })
 }

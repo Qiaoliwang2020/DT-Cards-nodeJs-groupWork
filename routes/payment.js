@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const moment = require('moment');
 const ObjectId = require('mongodb').ObjectId;
 const cc = require('currency-codes');
+const convertCurrency = require('./convertCurrency')
 const router = express.Router();
 
 // bodyParse setup
@@ -55,6 +56,18 @@ module.exports = params => {
        }
     });
 
+    router.post("/convertCurrency", (req, res) => {
+        let {balance, currency} = req.body;
+        let defaultCurrency = 'AUD';
+        try{
+            convertCurrency(balance, currency, defaultCurrency, function(err, amount) {
+                return res.status(200).json({message: 'success',balance:amount,currency:defaultCurrency });
+            })
+        }
+        catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    });
 
     router.post("/payment_refund", async (req, res) => {
         let { amount,payment_id } = req.body;

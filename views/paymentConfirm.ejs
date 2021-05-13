@@ -10,7 +10,7 @@
                 <img src="/assets/icon/payment-method.png" width="55">
                 <p id="transaction-type" data-currency ="<%= paymentData.currency.toLowerCase() %>"  class="text-cap-all text-gray">recharge</p>
                 <p id="business-name" class="text-light-black" data-country="<%= paymentData[0].country %>">DT Cards(<%= paymentData[0].country %>) - <%= paymentData[0].city %> </p>
-                <p id="payment-amount" class="pay-amount" data-id="<%= paymentData[0]._id %>"><%= parseFloat(paymentData.price).toFixed(2) %></p>
+                <div class="currency-amount"><p class="currency-code"><%= paymentData.currency%></p><p id="payment-amount" class="pay-amount" data-id="<%= paymentData[0]._id %>"><%= parseFloat(paymentData.price).toFixed(2) %></p></div>
             </div>
         </div>
 
@@ -22,7 +22,10 @@
         <div class="payment-details">
             <div class="center">
                 <img src="/assets/icon/check.png" width="100">
-                <p id="suc-amount" class="pay-amount success"></p>
+                <div class="currency-amount">
+                    <p class="currency-code"><%= paymentData.currency%></p>
+                    <p id="suc-amount" class="pay-amount success"></p>
+                </div>
                 <p class="text-light-black">Recharge for DT Cards(<%= paymentData[0].country %>) - <%= paymentData[0].city %></p>
                 <p id="receipt-no" class="text-light-black">Receipt No: N0378743767</p>
                 <p id="create-time" class="text-light-black"></p>
