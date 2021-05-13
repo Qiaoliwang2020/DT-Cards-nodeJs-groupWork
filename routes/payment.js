@@ -71,14 +71,14 @@ module.exports = params => {
     });
 
     router.post("/payment_refund", async (req, res) => {
-        let { amount,currency } = req.body;
-        console.log(parseFloat(amount))
+        let { amount,payment_id } = req.body;
+
         try {
             const refund = await stripe.refunds.create({
                 amount: Math.round(parseFloat(amount) * 100),
-                payment_intent: 'pi_Aabcxyz01aDfoo',
+                payment_intent: payment_id,
             });
-            return res.status(200).json(refund);
+            return res.status(200).json({message:"success",data:refund});
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -88,7 +88,18 @@ module.exports = params => {
         let paymentIntent = req.body;
         try {
             const payment = await client.db("reckoning").collection("payments").insertOne(paymentIntent);
-            return res.status(200).json(paymentIntent);
+            return res.status(200).json({message: "success"});
+
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
+        }
+    });
+
+    router.get("/paymentInfo", async (req, res) => {
+        let {cardId} = req.query;
+        try {
+            const payment = await client.db("reckoning").collection("payments").find({ cardId: cardId}).toArray();
+            return res.status(200).json({data:payment});
 
         } catch (err) {
             return res.status(500).json({ error: err.message });

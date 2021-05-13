@@ -2,7 +2,6 @@ $(document).ready(function() {
 
     let cardNumber =  $('.card-number').text().trim();
     let defaultCurrency =  $('#currency').data('currency');
-
     // generate bar code for the card
     generateBarCode(cardNumber);
 
@@ -65,34 +64,56 @@ $(document).ready(function() {
     })
     // when user click to withdraw
     $('#withdraw').on('click',function (){
+
+        let paymentInfo ={}
         let withdrawAmount = $('#withdraw-amount').val();
         let balance = $('#totalAmount').text();
-        if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
-            let data = {
-                amount:withdrawAmount,
-                currency: defaultCurrency
+        let data ={
+            cardId :cardNumber
+        };
+        $.get('/payment/paymentInfo',data,function (res){
+            try{
+                if(res.data.length >0){
+                    paymentInfo = res.data[0]
+
+                    if(withdrawAmount && parseFloat(balance) >= parseFloat(withdrawAmount)){
+                        let refund = {
+                            amount:withdrawAmount,
+                            payment_id: paymentInfo.id
+                        }
+                        // create a refund
+                        $.post( "/payment/payment_refund",refund,(result) =>{
+
+                            if(result.message == "success"){
+
+                                let refundInfo = result.data;
+                                refundInfo.cardId = cardNumber;
+                                refundInfo.type = "withdraw";
+
+                                let cardInfo = {
+                                    cardId:cardNumber,
+                                    balance:-withdrawAmount,
+                                }
+                                addPaymentInfo(refundInfo)
+                                updateBalance(cardInfo)
+                            }
+                        })
+                    }else{
+                        alert(
+                            "please check your balance"
+                        )
+                    }
+                }else{
+                    alert(
+                        "please check your balance"
+                    )
+                }
+            }
+            catch (err){
+                console.log(err)
             }
 
-            $.post( "/payment/payment_refund",data,(result) =>{
-                console.log(result,'res');
-            })
-
-            // let data ={
-            //     cardId : cardNumber,
-            //     balance:-withdrawAmount,
-            // }
-            // $.post( "/card/updateBalance",data,(result) =>{
-            //     console.log(result,'res');
-            //     if(result === 'success'){
-            //         $('#modal-payment').modal('close');
-            //         location.reload();
-            //     }
-            // })
-        }else{
-            alert(
-                "please check your balance"
-            )
-        }
+        })
     })
 })
 
@@ -143,4 +164,20 @@ getAmount = () => {
         $('.other-amount').addClass('hide');
     }
     return amount;
+}
+
+// update transport card balance
+updateBalance =(data)=>{
+    $.post( "/card/updateBalance",data,(result) =>{
+            if(result === 'success'){
+                $('#modal-payment').modal('close');
+                location.reload();
+            }
+     })
+}
+// add payment record to database
+addPaymentInfo = (data)=>{
+    $.post('/payment/addPaymentTransaction',data,function (res) {
+        console.log(res);
+    })
 }
