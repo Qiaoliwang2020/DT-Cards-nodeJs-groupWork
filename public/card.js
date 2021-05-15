@@ -128,7 +128,8 @@ $(document).ready(function() {
                         $('.card-view').addClass('hidden');
 
                         refundInfo.cardId = cardNumber;
-                        refundInfo.receiptNumber = receiptNumber;
+                        refundInfo.userId = $('.page-nav-user').data('userid');
+                        refundInfo.receipt_number = receiptNumber;
                         refundInfo.type = "withdraw";
                         addPaymentInfo(refundInfo);
                     },
@@ -201,10 +202,7 @@ getAmount = () => {
 // update transport card balance
 updateBalance =(data)=>{
     $.post( "/card/updateBalance",data,(result) =>{
-            if(result === 'success'){
-
-                //location.reload();
-            }
+            if(result === 'success'){}
      })
 }
 // add payment record to database

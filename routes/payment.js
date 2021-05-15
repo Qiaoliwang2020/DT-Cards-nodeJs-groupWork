@@ -85,6 +85,7 @@ module.exports = params => {
 
     router.post("/addPaymentTransaction", async (req, res) => {
         let paymentIntent = req.body;
+
         try {
             const payment = await client.db("reckoning").collection("payments").insertOne(paymentIntent);
             return res.status(200).json({message: "success",data:{payId:payment.insertedId}});
