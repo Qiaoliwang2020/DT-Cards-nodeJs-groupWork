@@ -18,7 +18,7 @@ module.exports = (params) => {
     try {
       let transacDetailData = await client
         .db("reckoning")
-        .collection("transactions")
+        .collection("payments")
         .find({ _id: ObjectId(transationId) })
         .toArray();
 

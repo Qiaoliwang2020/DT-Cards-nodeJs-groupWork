@@ -12,30 +12,26 @@
             </div>
             <div class="ml-130"><a href="/home/home.html">Back</a></div>
         </div>
+        <% for (var i=0; i <transacData.length; i++) { %>
+            <div class="transac-date">
 
-        <div class="transac-date">
-            <% for (var i=0; i <transacData.length; i++) { %>
                 <span class="calender-icon">
                     <img id="calander-icon" src="/assets/icon/calendar-image.png" width="25px" height="25px">
                     <%= formattedDate %>
                 </span>
-        </div>
-        <% if (transacData[i].type==='travel' ) { %>
+            </div>
             <div class="transac-list mt-20">
-                <a class="transac-item">
+                <div class="transac-item">
                     <div class="t-item-left">
-                        <img src="/assets/icon/melbourne.png" width="30" height="30">
-                        <% } else { %>
-                            <img src="/assets/icon/payment-method.png" width="30" height="30">
-                            <% } %>
+                        <img src="/assets/icon/payment-method.png" width="30" height="30">
                     </div>
                     <div class="t-item-right">
                         <div class="t-item-title">
-                            <%= transacData[i].title %>
+                            <%= transacData[i].type %>
                         </div>
-                        <% if (transacData[i].type==='withdraw' || transacData[i].type==='travel' ) { %>
-                            <div class="t-item-info">
-                                <a href="/transacDetailData?transationId=<%= transacData[i]._id %> ">Details</a>
+                        <div class="t-item-info">
+                            <a href="/transacDetailData?transationId=<%= transacData[i]._id %> ">Details</a>
+                            <% if (transacData[i].type==='withdraw' ) { %>
                                 <span class="price">
                                     - <%= transacData[i].currency.toUpperCase() %>
                                         <%= transacData[i].amount / 1000 %>
@@ -45,11 +41,11 @@
                                         + <%= transacData[i].currency.toUpperCase() %>
                                             <%= transacData[i].amount / 1000 %>
                                     </span>
-                            </div>
-                            <% } %>
+                        </div>
+                        <% } %>
                     </div>
-                </a>
-                <% } %>
+                </div>
             </div>
+            <% } %>
     </div>
 </div>
