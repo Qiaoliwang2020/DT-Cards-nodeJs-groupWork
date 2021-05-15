@@ -11,6 +11,7 @@ $(document).ready(function() {
     $('#submit').click(function (){
         let data={
             userId:$('#userNameSpan').data('userid'),
+            country:$('#country').val() ? $('#country').val() : null,
             city:$('#city').val() ? $('#city').val() : $('#state').val(),
             resident:$("input[name='resident']:checked").val(),
             cardHolderName:$('#cardHolderName').val(),
@@ -25,7 +26,7 @@ $(document).ready(function() {
         if(!invalid){
             $.post( "/cards/createCard",data,(result) =>{
                 $('#modal-new-card').modal('close');
-                if(result === 'success'){
+                if(result.message == "success"){
                     location.reload();
                 }
             });
@@ -53,7 +54,7 @@ invalidValues = (data)=>{
     return errs;
 }
 getCards =(userId)=>{
-    console.log(userId,'u');
+
     $.get(`/cards?userId=${userId}`,(result)=>{
         $('.cards-list').empty();
         if(result.length > 0){
@@ -61,7 +62,7 @@ getCards =(userId)=>{
                 let cards = `<a href="/card?id=${item._id}" class="card-item" style="background: ${item.cardBackground};">
                             <div class="card-left">
                                 <div class="card-label">Balance</div>
-                                <div class="card-amount">${item.balance}</div>
+                                <div class="card-amount">${item.balance.toFixed(2)}</div>
                             </div>
                             <div class="card-right text-right">
                            <span class="card-icon">
@@ -89,7 +90,6 @@ getCities =()=>{
         },
         success: function(msg) {
             token = msg.auth_token;
-            console.log(msg.auth_token,'token');
             $.ajax({
                 type: "GET",
                 url: "https://www.universal-tutorial.com/api/countries/",
@@ -127,7 +127,7 @@ getCities =()=>{
                 })
                 $('#state').append(`<option value="" disabled selected>Select a state</option>`);
                 states.forEach((item)=>{
-                    console.log(item);
+                    // console.log(item);
                     $('#state').append(`<option value='${item}'>${item}</option>`)
                 })
                 //console.log(states);
