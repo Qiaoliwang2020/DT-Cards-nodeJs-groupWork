@@ -1,4 +1,5 @@
 (function() {
+
     var _elementsModal_stripe;
     var _elementsModal_HOST_URL = "";
     var _elementsBackground_color = $('.payment-details').data('color')
@@ -346,8 +347,9 @@
 
             let createTime = data.create;
             let receiptNumber = moment(createTime).format("ddd-MMYY-hms");
+            data.userId = $('.page-nav-user').data('userid');
             data.cardId = $('#payment-amount').data('id');
-            data.receiptNumber = receiptNumber;
+            data.receipt_number = receiptNumber;
             data.type ="recharge";
 
             $('#suc-amount').text((data.amount/100).toFixed(2));
@@ -456,5 +458,4 @@
             currency: paymentIntent.currency
         });
     }
-
 })();
