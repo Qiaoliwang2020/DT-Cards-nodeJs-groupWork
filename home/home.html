@@ -34,7 +34,7 @@
 
             </div>
             <div class="history-list mt-30">
-                <div class="list-header"><span class="list-title">History</span><a href="/transacData">Transactions</a>
+                <div class="list-header"><span class="list-title">History</span><a class="transactions">Transactions</a>
                     <a href="/travelData">See
                         all</a>
                 </div>
@@ -170,6 +170,13 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="./home.js"></script>
+    <script>
+        let userid = $('#userNameSpan').data('userid')
+        console.log(userid)
+        $('.transactions').on('click', function () {
+            window.location.href = `/transacData?userId=${userid}`
+        })
+    </script>
 </body>
 
 </html>

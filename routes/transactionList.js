@@ -12,11 +12,12 @@ module.exports = (params) => {
 
   // Get data from Database
   router.get("/", async (req, res, next) => {
+    let userId = req.query.userId;
     try {
       let transacData = await client
         .db("reckoning")
         .collection("payments")
-        .find()
+        .find({ userId: userId })
         .toArray();
 
       const formattedDate = moment(transacData.created).format("DD/MM/YY");
