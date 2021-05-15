@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>DT Cards</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     <!-- Compiled and minified CSS -->
     <!-- Materialze-->
@@ -15,149 +16,160 @@
 
     <link href="/styles.css" rel="stylesheet">
 </head>
-<body>
-<div class="home-page">
-    <div class="container">
-        <h1 class="page-title center">Home</h1>
-        <div class="page-nav-profile">
-            <div class="page-nav-user">
-                <span class="user-icon center">
-                  <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
-               </span>
-               <div class="ml-10">Hello <span id="userNameSpan"></span></div>
-            </div>
-            <a href='/logout'>logout</a>
-        </div>
-        <div class="cards-list">
 
-        </div>
-        <div class="history-list mt-20">
-            <div class="list-header"><span class="list-title">History</span> <a href="#">See all</a></div>
-            <a class="history-item">
-                <div class="h-item-left">
-                    <img src="/assets/icon/melbourne.png" width="30" height="30">
+<body>
+    <div class="home-page">
+        <div class="container">
+            <h1 class="page-title center">Home</h1>
+            <div class="page-nav-profile">
+                <div class="page-nav-user">
+                    <span class="user-icon center">
+                        <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
+                    </span>
+                    <div class="ml-10">Hello <span id="userNameSpan"></span></div>
                 </div>
-                <div class="h-item-right">
-                    <div class="h-item-title">Flinders Street - Deakin University</div>
-                    <div class="h-item-info">
-                        <span class="date">15 Mar 2021</span>
-                        <span class="price">-$4.50</span>
-                    </div>
-                </div>
-            </a>
-            <a class="history-item">
-                <div class="h-item-left">
-                    <img src="/assets/icon/melbourne.png" width="30" height="30">
-                </div>
-                <div class="h-item-right">
-                    <div class="h-item-title">Flinders Street - Deakin University</div>
-                    <div class="h-item-info">
-                        <span class="date">15 Mar 2021</span>
-                        <span class="price">-$4.50</span>
-                    </div>
-                </div>
-            </a>
-            <a class="history-item">
-                <div class="h-item-left">
-                    <img src="/assets/icon/melbourne.png" width="30" height="30">
-                </div>
-                <div class="h-item-right">
-                    <div class="h-item-title">Flinders Street - Deakin University</div>
-                    <div class="h-item-info">
-                        <span class="date">15 Mar 2021</span>
-                        <span class="price">-$4.50</span>
-                    </div>
-                </div>
-            </a>
-            <a class="history-item">
-                <div class="h-item-left">
-                    <img src="/assets/icon/melbourne.png" width="30" height="30">
-                </div>
-                <div class="h-item-right">
-                    <div class="h-item-title">Flinders Street - Deakin University</div>
-                    <div class="h-item-info">
-                        <span class="date">15 Mar 2021</span>
-                        <span class="price">-$4.50</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="bottom-bar center">
-            <a href="#modal-new-card" class="modal-trigger btn-floating btn-large waves-effect waves-light green"><i class="material-icons">add</i></a>
-        </div>
-        <div id="modal-new-card" class="modal bottom-sheet">
-            <div class="modal-content">
-                <div class="modal-close-icon modal-close">x</div>
-                <h4 class="modal-title">Get a new card</h4>
-                <div>
-                    <label>Which City’s transport card you want to apply for?</label>
-                    <div class="mt-10">
-                        <select id="country" class="select-css mb-10">
-                            <option value="" disabled selected>Select a country</option>
-                        </select>
-                        <select id="state" class="select-css mb-10">
-                            <option value="" disabled selected>Select a state</option>
-                        </select>
-                        <select id="city" class="select-css mb-10">
-                            <option value="" disabled selected>Select a city</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="mb-20">Are you a resident?</label>
-                    <div class="mt-10 mb-10" id="resident">
-                        <label>
-                            <input name="resident" type="radio" value="Yes" />
-                            <span>Yes</span>
-                        </label>
-                        <label class="ml-20">
-                            <input name="resident" type="radio" value="No" />
-                            <span>No</span>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label>Card Holder’s name</label>
-                    <div class="mt-10"><input  type="text" id="cardHolderName" onblur="invalidValues({cardHolderName:this.value})"  /></div>
-                </div>
-                <div>
-                    <label class="mb-20">Gender</label>
-                    <div class="mt-10 mb-10" id="gender">
-                        <label>
-                            <input name="gender" type="radio" value="female" />
-                            <span>female</span>
-                        </label>
-                        <label class="ml-20">
-                            <input name="gender" type="radio" value="male" />
-                            <span>male</span>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label class="mb-20">Birthday</label>
-                    <input type="text" id="birthday" onblur="invalidValues({birthday:this.value})"  class="datepicker mt-10">
-                </div>
-                <div>
-                    <label class="mb-20">Current Address</label>
-                    <div class="mt-10"><input  type="text" id="address" onblur="invalidValues({address:this.value})" /></div>
-                </div>
-                <div>
-                    <label class="mb-20">Email</label>
-                    <div class="mt-10"><input  type="text" id="email" onblur="invalidValues({email:this.value})"/></div>
-                </div>
-                <div>
-                    <label class="mb-20">Phone</label>
-                    <div class="mt-10"><input  type="number" id="phone"onblur="invalidValues({phone:this.value})"/></div>
-                </div>
+                <a href='/logout'>logout</a>
             </div>
-            <div class="modal-footer">
-                <a class="button-primary" id="submit">Submit</a>
+            <div class="cards-list">
+
+            </div>
+            <div class="history-list mt-30">
+                <div class="list-header"><span class="list-title">History</span><a href="/transacData">Transactions</a>
+                    <a href="/travelData">See
+                        all</a>
+                </div>
+                <a class="history-item">
+                    <div class="h-item-left">
+                        <img src="/assets/icon/melbourne.png" width="30" height="30">
+                    </div>
+                    <div class="h-item-right">
+                        <div class="h-item-title">Flinders Street - Deakin University</div>
+                        <div class="h-item-info">
+                            <span class="date">15 Mar 2021</span>
+                            <span class="price">-$4.50</span>
+                        </div>
+                    </div>
+                </a>
+                <a class="history-item">
+                    <div class="h-item-left">
+                        <img src="/assets/icon/melbourne.png" width="30" height="30">
+                    </div>
+                    <div class="h-item-right">
+                        <div class="h-item-title">Flinders Street - Deakin University</div>
+                        <div class="h-item-info">
+                            <span class="date">15 Mar 2021</span>
+                            <span class="price">-$4.50</span>
+                        </div>
+                    </div>
+                </a>
+                <a class="history-item">
+                    <div class="h-item-left">
+                        <img src="/assets/icon/melbourne.png" width="30" height="30">
+                    </div>
+                    <div class="h-item-right">
+                        <div class="h-item-title">Flinders Street - Deakin University</div>
+                        <div class="h-item-info">
+                            <span class="date">15 Mar 2021</span>
+                            <span class="price">-$4.50</span>
+                        </div>
+                    </div>
+                </a>
+                <a class="history-item">
+                    <div class="h-item-left">
+                        <img src="/assets/icon/melbourne.png" width="30" height="30">
+                    </div>
+                    <div class="h-item-right">
+                        <div class="h-item-title">Flinders Street - Deakin University</div>
+                        <div class="h-item-info">
+                            <span class="date">15 Mar 2021</span>
+                            <span class="price">-$4.50</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="bottom-bar center">
+                <a href="#modal-new-card" class="modal-trigger btn-floating btn-large waves-effect waves-light green"><i
+                        class="material-icons">add</i></a>
+            </div>
+            <div id="modal-new-card" class="modal bottom-sheet">
+                <div class="modal-content">
+                    <div class="modal-close-icon modal-close">x</div>
+                    <h4 class="modal-title">Get a new card</h4>
+                    <div>
+                        <label>Which City’s transport card you want to apply for?</label>
+                        <div class="mt-10">
+                            <select id="country" class="select-css mb-10">
+                                <option value="" disabled selected>Select a country</option>
+                            </select>
+                            <select id="state" class="select-css mb-10">
+                                <option value="" disabled selected>Select a state</option>
+                            </select>
+                            <select id="city" class="select-css mb-10">
+                                <option value="" disabled selected>Select a city</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="mb-20">Are you a resident?</label>
+                        <div class="mt-10 mb-10" id="resident">
+                            <label>
+                                <input name="resident" type="radio" value="Yes" />
+                                <span>Yes</span>
+                            </label>
+                            <label class="ml-20">
+                                <input name="resident" type="radio" value="No" />
+                                <span>No</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Card Holder’s name</label>
+                        <div class="mt-10"><input type="text" id="cardHolderName"
+                                onblur="invalidValues({cardHolderName:this.value})" /></div>
+                    </div>
+                    <div>
+                        <label class="mb-20">Gender</label>
+                        <div class="mt-10 mb-10" id="gender">
+                            <label>
+                                <input name="gender" type="radio" value="female" />
+                                <span>female</span>
+                            </label>
+                            <label class="ml-20">
+                                <input name="gender" type="radio" value="male" />
+                                <span>male</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="mb-20">Birthday</label>
+                        <input type="text" id="birthday" onblur="invalidValues({birthday:this.value})"
+                            class="datepicker mt-10">
+                    </div>
+                    <div>
+                        <label class="mb-20">Current Address</label>
+                        <div class="mt-10"><input type="text" id="address"
+                                onblur="invalidValues({address:this.value})" /></div>
+                    </div>
+                    <div>
+                        <label class="mb-20">Email</label>
+                        <div class="mt-10"><input type="text" id="email" onblur="invalidValues({email:this.value})" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="mb-20">Phone</label>
+                        <div class="mt-10"><input type="number" id="phone" onblur="invalidValues({phone:this.value})" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="button-primary" id="submit">Submit</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="./home.js"></script>
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./home.js"></script>
 </body>
+
 </html>

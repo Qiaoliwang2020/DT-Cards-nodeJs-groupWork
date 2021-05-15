@@ -1,0 +1,46 @@
+<div class="travel-history-page">
+    <div class=" container">
+        <h1 class="page-title center">
+            Your Travels
+        </h1>
+        <div class="page-nav-profile">
+            <div class="page-nav-user">
+                <span class="user-icon center">
+                    <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
+                </span>
+                <div class="ml-10"> Hello <span id="userNameSpan"></span></div>
+            </div>
+            <div class="ml-120"><a href="/home/home.html">Back</a></div>
+        </div>
+        <div class="travel-date">
+            <% for (var i=0; i <travelData.length; i++) { %>
+                <% if (travelData[i].type==='travel' ) { %>
+                    <div class>
+                        <span class="calender-icon">
+                            <img id="calander-icon" src="/assets/icon/calendar-image.png" width="25" height="25">
+                            <%= formattedDate %>
+                        </span>
+                    </div>
+        </div>
+        <div class="travel-list mt-30">
+            <a class="travel-item">
+                <div class="h-item-left">
+                    <img src="/assets/icon/melbourne.png" width="30" height="30">
+                </div>
+                <div class="h-item-right">
+                    <div class="h-item-title">
+                        <%= travelData[i].title %>
+                    </div>
+                    <div class="travel-item-info">
+                        <span class="price">
+                            - <%= travelData[i].currency.toUpperCase() %>
+                                <%= travelData[i].amount / 1000 %>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            <% } %>
+                <% } %>
+        </div>
+    </div>
+</div>

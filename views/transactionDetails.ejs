@@ -1,0 +1,40 @@
+<div class="transaction-detail-page">
+    <div class="container">
+        <h1 class="page-title center">Transaction Details</h1>
+    </div>
+
+    <span class="transaction-icon">
+        <% if (transacDetailData[0].type==='travel' ) { %>
+            <div class="center-align">
+                <img class="transaction-icon" src="/assets/icon/public-transport.png" width="100px" height="100px">
+            </div>
+            <% } else { %>
+                <div class="center-align">
+                    <img class="transaction-icon" src="/assets/icon/payment-method.png" width="100px" height="100px">
+                </div>
+                <% } %>
+    </span>
+    <div class="transaction-detail-item">
+        <div class="transaction-detail-item-title center-align mt-30">
+            <%= transacDetailData[0].title %>
+        </div>
+    </div>
+    <div class="transaction-detail-item">
+        <% if (transacDetailData[0].type==='travel' || transacDetailData[0].type==='Withdraw' ) { %>
+            <span class="transaction-detail-item">
+                <div class="transaction-detail-item-price center-align">
+                    - <%= transacDetailData[0].currency.toUpperCase() %>
+                        <%= transacDetailData[0].amount / 1000 %>
+                </div>
+            </span>
+            <% } else { %>
+                <span class="transaction-detail-item">
+                    <div class="transaction-detail-item-price center-align">
+                        + <%= transacDetailData[0].currency.toUpperCase() %>
+                            <%= transacDetailData[0].amount / 1000 %>
+                    </div>
+                </span>
+                <% } %>
+    </div>
+</div>
+</div>
