@@ -5,6 +5,8 @@ const WebAppStrategy = require("ibmcloud-appid").WebAppStrategy;
 const CALLBACK_URL = "/ibm/cloud/appid/callback";
 
 let app = express();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
 let routes = require('./routes')
 let path = require('path');
 
@@ -12,6 +14,9 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://dbTest:dbTest@study.mqzkl.mongodb.net/reckoning?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
+
+const convertCurrency = require('./routes/convertCurrency');
+const defaultCurrency = 'AUD';
 
 let port = process.env.PORT || 8080;
 
@@ -70,9 +75,25 @@ app.get('/error', (req, res) => {
 	res.send('Authentication Error');
 });
 
-app.listen(port, () => {
+//socket test
+io.on('connection', (socket) => {
+	socket.on('checkExchangeRate', (balance,currency) => {
+		let results = {};
+		try{
+			convertCurrency(balance, currency, defaultCurrency, function(err, amount) {
+				results = {balance:amount,currency:defaultCurrency };
+				socket.emit('currentCurrency', results);
+			});
+		}
+		catch(err) {
+			console.log(err)
+		}
+
+	})
+});
+
+http.listen(port,()=>{
 	console.log("Listening on port ", port);
-	//console.log(process.env.NODE_ENV)
 });
 
 function getAppIDConfig() {

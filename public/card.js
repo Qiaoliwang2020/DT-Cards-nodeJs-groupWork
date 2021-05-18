@@ -2,25 +2,35 @@ $(document).ready(function() {
 
     let cardNumber =  $('.card-number').text().trim();
     let defaultCurrency =  $('#currency').data('currency');
+
+    // connect to the socket
+    let socket = io();
+
+    // show exchange rate of current currency
+    socket.on('currentCurrency', (msg) => {
+        let amount = getAmount();
+        let currency = $('#currency').val()
+        $('.show-currency').text(`${currency} ${amount} = ${msg.currency} ${msg.balance}`);
+    })
+
     // generate bar code for the card
     generateBarCode(cardNumber);
 
     getCurrencies(defaultCurrency);
 
+    // when currency change
+    $('#currency').on('change',function (){
+        convertCurrency(socket)
+    })
     // when amount change
     $('#amount').on('change',function (){
-        getAmount();
+        convertCurrency(socket)
     })
     // check exhange rate
     $('#check-exchangeRate').on('click',function (){
         let amount = getAmount();
-        let currency = $('#currency').val()
-        let data={
-            balance :amount,
-            currency:currency
-        }
         if(amount){
-            convertCurrency(data)
+            convertCurrency(socket)
         }
         else{
             M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
@@ -222,11 +232,8 @@ addPaymentInfo = (data)=>{
         }
     })
 }
-convertCurrency =(data)=>{
-
-    $.post('/payment/convertCurrency',data,function (res){
-        if(res.message == 'success'){
-            $('.show-currency').text(`${data.currency} ${data.balance} = ${res.currency} ${res.balance}`);
-        }
-    })
+convertCurrency =(socket)=>{
+    let amount = getAmount();
+    let currency = $('#currency').val()
+    socket.emit('checkExchangeRate', amount,currency);
 }
