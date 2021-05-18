@@ -41,7 +41,6 @@ $(document).ready(function() {
     })
     // withdraw action
     $('#withdrawAction').on('click',function (){
-
         let cardBalance = parseFloat($('#cardBalance').text())
         if(cardBalance > 0){
             // withdraw
@@ -103,7 +102,6 @@ $(document).ready(function() {
 
         try{
             if(withdrawAmount && parseFloat(paymentInfo.amount) >= parseFloat(withdrawAmount)){
-
                 let refund = {
                     amount:withdrawAmount,
                     payment_id: paymentInfo.id

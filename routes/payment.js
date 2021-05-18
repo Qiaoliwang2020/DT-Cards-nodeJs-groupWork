@@ -27,9 +27,7 @@ module.exports = params => {
     const {client} = params;
 
     router.get("/", async (req, res, next) => {
-
         let cardId = req.query.id,amount = req.query.amount,currency = req.query.currency;
-
         try {
             let paymentData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId)}).toArray();
             paymentData.price =  amount
@@ -38,12 +36,10 @@ module.exports = params => {
                 template: 'paymentConfirm',
                 paymentData
             })
-
         } catch (err) {
             console.log("Error on dashboard enpoint", err);
             return next(err);
         }
-
     });
 
     router.get("/currencies", (req, res) => {

@@ -360,7 +360,7 @@
         // add payment record to database
         $.post('/payment/addPaymentTransaction',data,function (res) {
             if(res.message == "success"){
-                console.log(data,res,'res')
+                // console.log(data,res,'res')
                 let payId = res.data.payId;
                 let cardInfo = {
                     cardId:data.cardId,
