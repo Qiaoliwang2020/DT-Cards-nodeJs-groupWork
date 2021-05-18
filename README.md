@@ -29,7 +29,7 @@ run locally
 
 After installing, run the server using
 
-    npm start
+    npm run dev
 
 This should print the following to the console.
 
