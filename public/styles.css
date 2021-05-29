@@ -250,12 +250,32 @@ h1.page-title{
   justify-content: space-between;
   padding: 10px 0px;
 }
-.history-list .history-item{
+.history-list .history-item .history-item-top{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.history-item-top .top-left{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.history-item-top .top-left .top-text{
+  font-size: 14px;
+  color: black;
+  margin-right: 5px;
+}
+.history-item-top .top-left .rate-score{
+  margin-left: 3px;
+}
+.history-list .history-item .history-content{
   display: flex;
   justify-content: start;
   align-items: center;
   margin-bottom: 10px;
+  padding-bottom: 10px;
   cursor: pointer;
+  border-bottom: 1px solid #f2f2f2;
 }
 .h-item-left{
   width: 50px;
@@ -398,6 +418,18 @@ h1.page-title{
   font-size: 20px;
   margin-right: 10px;
   text-transform: uppercase;
+}
+
+/* Rate stars*/
+.star {
+  width: 15px;
+  height: 15px;
+  background: url("/assets/icon/star_yellow.svg") 0 0 no-repeat;
+  background-size: 15px 15px;
+  margin-right: 3px;
+}
+.star.gray{
+  filter: grayscale(100%);
 }
 
 
