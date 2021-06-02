@@ -465,4 +465,25 @@ h1.page-title{
   border-radius: 6px;
   background-color: #FFC107;
 }
+.rate-wrap{
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+.rate-wrap #rateScore{
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  padding-top: 5px;
+}
+.rate-editor{
+  margin-top: 20px;
+}
+.rate-editor textarea{
+  background-color: #F2F2F2;
+  border: none;
+  border-radius: 6px;
+  min-height: 150px;
+  padding: 5px;
+}
 

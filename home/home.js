@@ -125,7 +125,7 @@ getTravelHistories = (userId)=>{
     if (result.length > 0) {
       result.forEach((item) => {
         let dateFormatter = moment.unix(item.created / 1000).format('DD-MM-YYYY');
-        let travelItem = `<a class="history-item">
+        let travelItem = `<div class="history-item">
                     <div class="history-item-top">
                         <div class="top-left">
                             <div class="top-text">${item.city}</div>
@@ -136,9 +136,9 @@ getTravelHistories = (userId)=>{
                             <div class="star gray"></div>
                             <div class="rate-score text-light-black">4.0</div>
                         </div>
-                        <div class="top-right">
+                        <a href="/rateAndReview" class="top-right">
                             Reviews
-                        </div>
+                        </a>
                     </div>
                     <div class="history-content">
                         <div class="h-item-left">
@@ -152,7 +152,7 @@ getTravelHistories = (userId)=>{
                             </div>
                         </div>
                     </div>
-                </a>`
+                </div>`
         $('.history-list-content').append(travelItem);
       })
     }else {
