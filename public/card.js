@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     let cardNumber =  $('.card-number').text().trim();
     let defaultCurrency =  $('#currency').data('currency');
-
+    let cardBalance = parseFloat($('#cardBalance').text())
     // connect to the socket
     let socket = io();
 
@@ -51,7 +51,6 @@ $(document).ready(function() {
     })
     // withdraw action
     $('#withdrawAction').on('click',function (){
-        let cardBalance = parseFloat($('#cardBalance').text())
         if(cardBalance > 0){
             // withdraw
             let cardPayId = $('#withdraw').data('pid')
@@ -156,6 +155,39 @@ $(document).ready(function() {
             console.log(err)
         }
     })
+
+    // simulate user use the card
+    $('.card-details').on('click',function (){
+        let userId = $('#userNameSpan').data('userid');
+        let travelItem = [
+            {
+                title:'4-Elizabeth St/Flinders St to 63-Deakin University/Burwood Hwy',
+                amount:2.5,
+            },
+            {
+                title:'Brunswick West - Barkly Square Shopping Centre via Hope Street and Sydney Road',
+                amount:4.5,
+            },
+            {
+                title:'Airport West to Gowanbrae via Melrose Drive and Gowanbrae Drive',
+                amount:5,
+            }]
+        let randomNum = Math.floor(Math.random() * 3);
+        let currentTimestamp = Date.now();
+        let city = $('#cityName').text().trim();
+        let data = {
+            cardId:cardNumber,
+            userId:userId,
+            amount:travelItem[randomNum].amount*1000,
+            title:travelItem[randomNum].title,
+            city:city,
+            created:currentTimestamp,
+            type:"travel",
+            currency:"aud",
+        }
+        //console.log(data);
+        addTravelData(data)
+    })
 })
 
 // generate a bar code for the card with card number
@@ -237,3 +269,14 @@ convertCurrency =(socket)=>{
     let currency = $('#currency').val()
     socket.emit('checkExchangeRate', amount,currency);
 }
+
+// insert travel data to transaction's collection
+addTravelData = (data)=>{
+    $.post('/travelData/addTransaction',data,function (res) {
+        if(res.message == "success"){
+           console.log(res,'res');
+        }
+    })
+}
+
+
