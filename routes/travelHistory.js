@@ -51,14 +51,14 @@ module.exports = (params) => {
     }
   })
   /**
-   *  get travels by user id
+   *  get travels by user id (limit 5)
    *  Qiaoli Wang
    *  wangqiao@deakin.edu.au
    */
   router.get("/travels", async (req, res, next) => {
     let userId = req.query.userId;
     try {
-      let travelsData = await client.db("reckoning").collection("transactions").find({userId: userId}).toArray();
+      let travelsData = await client.db("reckoning").collection("transactions").find({userId: userId}).sort({created: -1}).limit(5).toArray();
 
       return  res.json(travelsData);
 

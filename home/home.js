@@ -86,6 +86,82 @@ getCards = (userId) => {
     }
   });
 };
+getCards = (userId) => {
+  $.get(`/cards?userId=${userId}`, (result) => {
+    $(".cards-list").empty();
+    if (result.length > 0) {
+      result.forEach((item) => {
+        let cards = `<a href="/card?id=${
+            item._id
+        }" class="card-item" style="background: ${item.cardBackground};">
+                            <div class="card-left">
+                                <div class="card-label">Balance</div>
+                                <div class="card-amount">${item.balance.toFixed(
+            2
+        )}</div>
+                            </div>
+                            <div class="card-right text-right">
+                           <span class="card-icon">
+                                <img src="/assets/icon/public-transport.png" width="35" height="35">
+                            </span>
+                                <div class="card-location">${
+            item.city
+        }<i class="small material-icons">chevron_right</i></div>
+                            </div>
+                        </a>`;
+        $(".cards-list").append(cards);
+      });
+    } else {
+      $(".cards-list").append(
+          '<div class="no-data">No cards here. <a class="modal-trigger" href="#modal-new-card">Get one</a></div>'
+      );
+    }
+  });
+};
+getTravelHistories = (userId)=>{
+  $.get(`/travelData/travels/?userId=${userId}`, (result) => {
+     console.log(result,'ress');
+     $('.history-list-content').empty();
+    if (result.length > 0) {
+      result.forEach((item) => {
+        let dateFormatter = moment.unix(item.created / 1000).format('DD-MM-YYYY');
+        let travelItem = `<a class="history-item">
+                    <div class="history-item-top">
+                        <div class="top-left">
+                            <div class="top-text">${item.city}</div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star"></div>
+                            <div class="star gray"></div>
+                            <div class="rate-score text-light-black">4.0</div>
+                        </div>
+                        <div class="top-right">
+                            Reviews
+                        </div>
+                    </div>
+                    <div class="history-content">
+                        <div class="h-item-left">
+                            <img src="/assets/icon/public-transport.png" width="30" height="30">
+                        </div>
+                        <div class="h-item-right">
+                            <div class="h-item-title">${item.title}</div>
+                            <div class="h-item-info">
+                                <span class="date"> ${dateFormatter}</span>
+                                <span class="price">-$ ${(item.amount/1000).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>`
+        $('.history-list-content').append(travelItem);
+      })
+    }else {
+      $(".history-list-content").append(
+          '<div class="no-data">No travel history here. </div>'
+      );
+    }
+  })
+}
 getCities = () => {
   let token = "";
   $.ajax({
@@ -181,6 +257,7 @@ getUserInfo = () => {
     $("#email").val(id_token.email);
 
     getCards(id_token.sub);
+    getTravelHistories(id_token.sub);
     /**
      * add by Joel
      */

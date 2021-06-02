@@ -294,6 +294,8 @@ h1.page-title{
   flex: 1;
 }
 .h-item-title{
+  width: 100%;
+  max-width: 300px;
   color: #000000;
   white-space: nowrap;
   overflow: hidden;
