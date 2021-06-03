@@ -16,13 +16,14 @@ module.exports = params => {
 
     router.get("/", async (req, res, next) => {
 
-        //let cardId = req.query.id;
+        let cardId = req.query.cardId;
 
         try {
-            //let cardData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId)}).toArray();
+            let cardData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId)}).toArray();
 
             return res.render('layout', {
-                template: 'rateAndReviewDetails'
+                template: 'rateAndReviewDetails',
+                cardData
             })
 
         } catch (err) {
@@ -31,6 +32,48 @@ module.exports = params => {
         }
 
     });
+    router.post("/addReview", async (req, res, next) => {
+
+        let review = req.body;
+        review.createTime = Date.now();
+        try {
+            const reviews = await client.db("reckoning").collection("reviews").insertOne(review);
+            return res.status(200).send("success")
+
+        } catch (err) {
+            console.log("Error when update card Balance", err);
+            return next(err);
+        }
+    })
+    router.post("/addRate", async (req, res, next) => {
+
+        let rate = req.body;
+
+        try {
+            const rates = await client.db("reckoning").collection("rates").insertOne(rate);
+            return res.status(200).send("success")
+
+        } catch (err) {
+            console.log("Error when update card Balance", err);
+            return next(err);
+        }
+    });
+    router.get("/reviews", async (req, res, next) => {
+
+        let {city} = req.query;
+
+        try {
+            let reviews = await client.db("reckoning").collection("reviews").find({city:city}).toArray();
+
+            return res.json(reviews);
+
+        } catch (err) {
+            console.log("Error on card detail enpoint", err);
+            return next(err);
+        }
+
+    });
+
     return router;
 };
 

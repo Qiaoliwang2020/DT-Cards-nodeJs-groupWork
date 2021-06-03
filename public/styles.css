@@ -87,6 +87,11 @@ h1.home-title{
 .mb-20{
   margin-bottom: 20px;
 }
+.basic-flex{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
 .text-right{
   text-align: right;
 }
@@ -485,5 +490,21 @@ h1.page-title{
   border-radius: 6px;
   min-height: 150px;
   padding: 5px;
+}
+.review-item{
+  margin-top: 20px;
+}
+.review-item .review-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.review-top img{
+  border-radius: 100%;
+  background-color: #F2F2F2;
+}
+/* overwrite style of rate library*/
+.jq-ry-container{
+  padding: 0px 5px 0px 0px;
 }
 

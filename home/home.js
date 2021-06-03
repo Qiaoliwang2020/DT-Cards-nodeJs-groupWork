@@ -136,7 +136,7 @@ getTravelHistories = (userId)=>{
                             <div class="star gray"></div>
                             <div class="rate-score text-light-black">4.0</div>
                         </div>
-                        <a href="/rateAndReview" class="top-right">
+                        <a href="/rateAndReview?cardId=${item.cardId}" class="top-right">
                             Reviews
                         </a>
                     </div>

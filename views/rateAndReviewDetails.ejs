@@ -11,7 +11,7 @@
     </div>
     <div class="rate-title">
         <div class="rate-city">
-            Melbourne
+            <%= cardData[0].city %>
         </div>
         <div class="rate-score">
             <div class="star"></div>
@@ -59,10 +59,28 @@
         <div id="rateScore"></div>
     </div>
     <div class="rate-editor">
-        <textarea></textarea>
+        <textarea id="reviewContext"></textarea>
     </div>
     <div class="mt-10">
-        <button class="button-primary">Post</button>
+        <button class="button-primary" id="postReview">Post</button>
+    </div>
+
+    <div class="review-list mt-30">
+        <div class="review-item">
+            <div class="review-top">
+                <img src="/assets/icon/user.png" width="32" height="32">
+                <span>Name</span>
+            </div>
+            <div class="basic-flex mt-10">
+                <div>star</div>
+                <div class="text-gray ml-10">3 months ago</div>
+            </div>
+            <div class="review-content mt-10">
+                Mary and the team are excellent to deal with, over the past 5 years of dealing with Ace Property Share they have made everything very simple.
+
+                They are quick to respond to emails and phone calls and deal with things in a prompt and professional manner.
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
