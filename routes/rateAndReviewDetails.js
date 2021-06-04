@@ -13,7 +13,10 @@ router.use(bodyParser.json());
 
 module.exports = params => {
     const { client } = params;
-
+    /**
+     *  user get card details (city)
+     *  qiaoli wang (wangqiao@deakin.edu.au)
+     */
     router.get("/", async (req, res, next) => {
 
         let cardId = req.query.cardId;
@@ -32,6 +35,10 @@ module.exports = params => {
         }
 
     });
+    /**
+     * user add review
+     * qiaoli wang (wangqiao@deakin.edu.au)
+     */
     router.post("/addReview", async (req, res, next) => {
 
         let review = req.body;
@@ -45,19 +52,10 @@ module.exports = params => {
             return next(err);
         }
     })
-    router.post("/addRate", async (req, res, next) => {
-
-        let rate = req.body;
-
-        try {
-            const rates = await client.db("reckoning").collection("rates").insertOne(rate);
-            return res.status(200).send("success")
-
-        } catch (err) {
-            console.log("Error when update card Balance", err);
-            return next(err);
-        }
-    });
+    /**
+     *  get all reviews by city
+     *  qiaoli wang (wangqiao@deakin.edu.au)
+     */
     router.get("/reviews", async (req, res, next) => {
 
         let {city} = req.query;
@@ -73,7 +71,55 @@ module.exports = params => {
         }
 
     });
+    /**
+     * user add rate
+     * qiaoli wang (wangqiao@deakin.edu.au)
+     */
+    router.post("/addRate", async (req, res, next) => {
 
+        let rate = req.body;
+
+        try {
+            const rates = await client.db("reckoning").collection("rates").insertOne(rate);
+            return res.status(200).send("success")
+
+        } catch (err) {
+            console.log("Error when update card Balance", err);
+            return next(err);
+        }
+    });
+    /**
+     *  get average rate by city
+     *  qiaoli wang (wangqiao@deakin.edu.au)
+     */
+    router.get("/averageRate", async (req, res, next) => {
+
+        let {city} = req.query;
+        try {
+            let rate = await client.db("reckoning").collection("rates").find({city:city}).toArray();
+            let averageRate = {city:'',rating:0},totalRating = 0;
+
+            if(rate.length > 1){
+               rate.forEach((item)=>{
+                   let rating = parseFloat(item.rating);
+                   averageRate._id = item._id;
+                   totalRating += rating;
+                   averageRate.rating = (totalRating/rate.length).toFixed(1).toString();
+                   averageRate.city = item.city;
+               })
+
+              return res.status(200).send(averageRate)
+
+            }else{
+                return res.status(200).send(rate[0]);
+            }
+
+        } catch (err) {
+            console.log("Error on card detail enpoint", err);
+            return next(err);
+        }
+
+    });
     return router;
 };
 

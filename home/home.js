@@ -33,6 +33,12 @@ $(document).ready(function () {
   });
 });
 
+/**
+ * value invalid
+ * @param data
+ * @returns {string[]}
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 // value invalid
 invalidValues = (data) => {
   $(".invalid-text").remove();
@@ -54,38 +60,11 @@ invalidValues = (data) => {
   }
   return errs;
 };
-getCards = (userId) => {
-  $.get(`/cards?userId=${userId}`, (result) => {
-    $(".cards-list").empty();
-    if (result.length > 0) {
-      result.forEach((item) => {
-        let cards = `<a href="/card?id=${
-          item._id
-        }" class="card-item" style="background: ${item.cardBackground};">
-                            <div class="card-left">
-                                <div class="card-label">Balance</div>
-                                <div class="card-amount">${item.balance.toFixed(
-                                  2
-                                )}</div>
-                            </div>
-                            <div class="card-right text-right">
-                           <span class="card-icon">
-                                <img src="/assets/icon/public-transport.png" width="35" height="35">
-                            </span>
-                                <div class="card-location">${
-                                  item.city
-                                }<i class="small material-icons">chevron_right</i></div>
-                            </div>
-                        </a>`;
-        $(".cards-list").append(cards);
-      });
-    } else {
-      $(".cards-list").append(
-        '<div class="no-data">No cards here. <a class="modal-trigger" href="#modal-new-card">Get one</a></div>'
-      );
-    }
-  });
-};
+/**
+ * get all cards by user id
+ * @param userId
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getCards = (userId) => {
   $.get(`/cards?userId=${userId}`, (result) => {
     $(".cards-list").empty();
@@ -118,23 +97,24 @@ getCards = (userId) => {
     }
   });
 };
+/**
+ * get travel list by user id
+ * @param userId
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getTravelHistories = (userId)=>{
   $.get(`/travelData/travels/?userId=${userId}`, (result) => {
-     console.log(result,'ress');
      $('.history-list-content').empty();
     if (result.length > 0) {
       result.forEach((item) => {
         let dateFormatter = moment.unix(item.created / 1000).format('DD-MM-YYYY');
-        let travelItem = `<div class="history-item">
+        getAverageRate({city:item.city},function (res){
+          let travelItem = `<div class="history-item">
                     <div class="history-item-top">
                         <div class="top-left">
-                            <div class="top-text">${item.city}</div>
-                            <div class="star"></div>
-                            <div class="star"></div>
-                            <div class="star"></div>
-                            <div class="star"></div>
-                            <div class="star gray"></div>
-                            <div class="rate-score text-light-black">4.0</div>
+                            <div class="top-text">${res.city}</div>
+                            <div class="rate-star"></div>
+                            <div class="rate-score text-light-black">${res.rating}</div>
                         </div>
                         <a href="/rateAndReview?cardId=${item.cardId}" class="top-right">
                             Reviews
@@ -153,7 +133,15 @@ getTravelHistories = (userId)=>{
                         </div>
                     </div>
                 </div>`
-        $('.history-list-content').append(travelItem);
+          $('.history-list-content').append(travelItem);
+          // show the rate star by rating score
+          $('.rate-star').rateYo({
+            ratedFill:"#FFC107",
+            normalFill: "#C4C4C4",
+            rating: res.rating,
+            starWidth: "15px"
+          });
+        });
       })
     }else {
       $(".history-list-content").append(
@@ -162,6 +150,10 @@ getTravelHistories = (userId)=>{
     }
   })
 }
+/**
+ *  get cities by country
+ *  qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getCities = () => {
   let token = "";
   $.ajax({
@@ -198,7 +190,7 @@ getCities = () => {
       });
     },
   });
-
+ // when country change
   $("#country").on("change", function () {
     $.ajax({
       type: "GET",
@@ -223,6 +215,7 @@ getCities = () => {
       },
     });
   });
+  // when state change
   $("#state").on("change", function () {
     $.ajax({
       type: "GET",
@@ -247,6 +240,21 @@ getCities = () => {
     });
   });
 };
+/**
+ * get average rates by city
+ * @param city
+ */
+getAverageRate =(city,callBack)=>{
+  $.get('/rateAndReview/averageRate',city,(res)=>{
+    if(res){
+      callBack(res);
+    }
+  })
+}
+/**
+ *  get user information from IBM App ID authentication
+ *  qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getUserInfo = () => {
   // user info from app id
   $.getJSON("/home/api/idPayload", function (id_token) {
