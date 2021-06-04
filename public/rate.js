@@ -19,6 +19,7 @@ $(document).ready(function() {
     // get average rate by current city
     getAverageRate({city:city});
 
+    // post a review
     $('#postReview').on('click',function (){
         let userName = $('#userNameSpan').text().trim(),
             userIcon = $('#user-icon').attr('src'),
@@ -38,8 +39,14 @@ $(document).ready(function() {
         addReview(reviewObj);
         addRate(rateObj);
     })
+    // initialize reply modal
+    $("#modalReply").modal();
 })
-
+/**
+ * add a review
+ * @param data
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 addReview = (data)=>{
     $.post('/rateAndReview/addReview',data,(res)=>{
         if(res == 'success'){
@@ -49,32 +56,17 @@ addReview = (data)=>{
         }
     })
 }
+/**
+ * get reviews by city
+ * @param city
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getReviews = (city)=>{
     $('.review-list').empty();
     $.get('/rateAndReview/reviews',city,(res)=>{
         if(res.length > 0){
-            let s5 = res.filter((item)=>{
-                return parseFloat(item.rating)  == 5
-            })
-            let s4 = res.filter((item)=>{
-                return  parseFloat(item.rating)  < 5 && parseFloat(item.rating)  > 4
-            })
-            let s3 = res.filter((item)=>{
-                return  parseFloat(item.rating) < 4 && parseFloat(item.rating)  > 3
-            })
-            let s2 = res.filter((item)=>{
-                return  parseFloat(item.rating) < 3 && parseFloat(item.rating)  > 2
-            })
-            let s1 = res.filter((item)=>{
-                return  parseFloat(item.rating) < 2 && parseFloat(item.rating)  > 1
-            })
-            $('.star-5').attr('style',  'width:'+s5.length +'%');
-            $('.star-4').attr('style',  'width:'+s4.length +'%');
-            $('.star-3').attr('style',  'width:'+s3.length +'%');
-            $('.star-2').attr('style',  'width:'+s2.length +'%');
-            $('.star-1').attr('style',  'width:'+s1.length +'%');
-            console.log(s5.length,s4.length,s3.length,s2.length,s1.length);
-            res.forEach((item)=>{
+            showScorePercentage(res);
+            res.forEach((item,index)=>{
                 let reviewItem = `<div class="review-item">
                     <div class="review-top">
                         <img src="${item.userIcon}" width="32" height="32">
@@ -88,6 +80,9 @@ getReviews = (city)=>{
                     <div class="review-content mt-10">
                         ${item.review}
                     </div>
+                    <div class="review-operation">
+                        <span id="reply-${index}" class="text-gray" onclick="addReply(${index})" data-user="${item.userName}">Reply</span>
+                    </div>
                 </div>`
                 $('.review-list').append(reviewItem);
                 $(".rating-item").rateYo({
@@ -100,16 +95,23 @@ getReviews = (city)=>{
         }else {
             $('.review-list').empty();
         }
-
-        console.log(res,'res review');
     })
 }
+/**
+ * give a rate
+ * @param data
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 addRate = (data)=>{
     $.post('/rateAndReview/addRate',data,(res)=>{
         console.log(res,'resssss');
     })
 }
-
+/**
+ * get average rating score of current city
+ * @param city
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
 getAverageRate = (city) =>{
     $.get('/rateAndReview/averageRate',city,(res)=>{
         if(res){
@@ -123,3 +125,37 @@ getAverageRate = (city) =>{
         }
     })
 }
+/**
+ * display percentage of each rating level
+ * @param data
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
+showScorePercentage=(data)=>{
+    let s5 = data.filter((item)=>{
+        return parseFloat(item.rating)  == 5
+    })
+    let s4 = data.filter((item)=>{
+        return  parseFloat(item.rating)  < 5 && parseFloat(item.rating)  > 4
+    })
+    let s3 = data.filter((item)=>{
+        return  parseFloat(item.rating) < 4 && parseFloat(item.rating)  > 3
+    })
+    let s2 = data.filter((item)=>{
+        return  parseFloat(item.rating) < 3 && parseFloat(item.rating)  > 2
+    })
+    let s1 = data.filter((item)=>{
+        return  parseFloat(item.rating) < 2 && parseFloat(item.rating)  > 1
+    })
+    $('.star-5').attr('style',  'width:'+s5.length +'%');
+    $('.star-4').attr('style',  'width:'+s4.length +'%');
+    $('.star-3').attr('style',  'width:'+s3.length +'%');
+    $('.star-2').attr('style',  'width:'+s2.length +'%');
+    $('.star-1').attr('style',  'width:'+s1.length +'%');
+}
+
+addReply=(index)=>{
+    let replyUser = $(`#reply-${index}`).data('user');;
+    $('.reply-title').text(`Reply @${replyUser}`)
+    M.Modal.getInstance($('#modalReply')).open();
+}
+

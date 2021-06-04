@@ -36,7 +36,7 @@ module.exports = params => {
 
     });
     /**
-     * user add review
+     *  add a review
      * qiaoli wang (wangqiao@deakin.edu.au)
      */
     router.post("/addReview", async (req, res, next) => {
@@ -72,7 +72,7 @@ module.exports = params => {
 
     });
     /**
-     * user add rate
+     *  add a rating
      * qiaoli wang (wangqiao@deakin.edu.au)
      */
     router.post("/addRate", async (req, res, next) => {

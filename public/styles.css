@@ -144,6 +144,9 @@ h1.home-title{
 .modal-content{
   position: relative;
 }
+#modalReply{
+  height: 250px!important;
+}
 label {
   font-size: .9rem;
   color: #333;
@@ -491,6 +494,9 @@ h1.page-title{
   min-height: 150px;
   padding: 5px;
 }
+.review-list{
+  margin-top: 60px;
+}
 .review-item{
   margin-top: 20px;
 }
@@ -502,6 +508,14 @@ h1.page-title{
 .review-top img{
   border-radius: 100%;
   background-color: #F2F2F2;
+}
+.review-operation{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.reply-content{
+  min-height: 100px;
 }
 /* overwrite style of rate library*/
 .jq-ry-container{
