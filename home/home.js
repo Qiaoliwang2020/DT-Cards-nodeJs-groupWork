@@ -106,9 +106,11 @@ getTravelHistories = (userId)=>{
   $.get(`/travelData/travels/?userId=${userId}`, (result) => {
      $('.history-list-content').empty();
     if (result.length > 0) {
+      console.log(result,'resss');
       result.forEach((item) => {
         let dateFormatter = moment.unix(item.created / 1000).format('DD-MM-YYYY');
         getAverageRate({city:item.city},function (res){
+          console.log(res,'resss');
           let travelItem = `<div class="history-item">
                     <div class="history-item-top">
                         <div class="top-left">

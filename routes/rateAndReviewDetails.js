@@ -107,13 +107,14 @@ module.exports = params => {
                    averageRate.rating = (totalRating/rate.length).toFixed(1).toString();
                    averageRate.city = item.city;
                })
+            return res.status(200).send(averageRate)
 
-              return res.status(200).send(averageRate)
-
-            }else{
+            }else if(rate.length === 0){
+                return res.status(200).send({city:city,rating:"0.0"});
+            }
+            else{
                 return res.status(200).send(rate[0]);
             }
-
         } catch (err) {
             console.log("Error on card detail enpoint", err);
             return next(err);
