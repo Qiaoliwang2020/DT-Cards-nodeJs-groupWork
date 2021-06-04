@@ -14,8 +14,10 @@ $(document).ready(function() {
         $('#rateScore').text(rating);
     });
 
-    // get reviews belongs to current city
+    // get reviews by current city
     getReviews({city:city});
+    // get average rate by current city
+    getAverageRate({city:city});
 
     $('#postReview').on('click',function (){
         let userName = $('#userNameSpan').text().trim(),
@@ -51,6 +53,27 @@ getReviews = (city)=>{
     $('.review-list').empty();
     $.get('/rateAndReview/reviews',city,(res)=>{
         if(res.length > 0){
+            let s5 = res.filter((item)=>{
+                return parseFloat(item.rating)  == 5
+            })
+            let s4 = res.filter((item)=>{
+                return  parseFloat(item.rating)  < 5 && parseFloat(item.rating)  > 4
+            })
+            let s3 = res.filter((item)=>{
+                return  parseFloat(item.rating) < 4 && parseFloat(item.rating)  > 3
+            })
+            let s2 = res.filter((item)=>{
+                return  parseFloat(item.rating) < 3 && parseFloat(item.rating)  > 2
+            })
+            let s1 = res.filter((item)=>{
+                return  parseFloat(item.rating) < 2 && parseFloat(item.rating)  > 1
+            })
+            $('.star-5').attr('style',  'width:'+s5.length +'%');
+            $('.star-4').attr('style',  'width:'+s4.length +'%');
+            $('.star-3').attr('style',  'width:'+s3.length +'%');
+            $('.star-2').attr('style',  'width:'+s2.length +'%');
+            $('.star-1').attr('style',  'width:'+s1.length +'%');
+            console.log(s5.length,s4.length,s3.length,s2.length,s1.length);
             res.forEach((item)=>{
                 let reviewItem = `<div class="review-item">
                     <div class="review-top">
@@ -84,5 +107,19 @@ getReviews = (city)=>{
 addRate = (data)=>{
     $.post('/rateAndReview/addRate',data,(res)=>{
         console.log(res,'resssss');
+    })
+}
+
+getAverageRate = (city) =>{
+    $.get('/rateAndReview/averageRate',city,(res)=>{
+        if(res){
+            $('#averageScore').rateYo({
+                ratedFill:"#FFC107",
+                normalFill: "#C4C4C4",
+                rating: res.rating,
+                starWidth: "15px"
+            });
+            $('#averageScore-text').text(res.rating);
+        }
     })
 }
