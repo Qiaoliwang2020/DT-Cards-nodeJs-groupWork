@@ -5,12 +5,14 @@ $(document).ready(function() {
     // initialize rate
     let ratedFill ="#FFC107",
         normalFill = "#C4C4C4";
+    $('#rateScore').text(0.0.toFixed(1));
+
     const $rateYo = $("#rateYo").rateYo({
         rating: 0.0,
         ratedFill:ratedFill,
         normalFill: normalFill,
     }).on("rateyo.change", function (e, data) {
-        let rating = data.rating;
+        let rating = parseFloat(data.rating).toFixed(1);
         $('#rateScore').text(rating);
     });
 
@@ -22,12 +24,15 @@ $(document).ready(function() {
     // post a review
     $('#postReview').on('click',function (){
         let userName = $('#userNameSpan').text().trim(),
+            userId = $('#userNameSpan').data('userid'),
             userIcon = $('#user-icon').attr('src'),
             rating = $rateYo.rateYo("rating"),
             review = $('#reviewContext').val().trim().toString();
+
         let reviewObj = {
             city:city,
             userName:userName,
+            userId:userId,
             userIcon:userIcon,
             rating:rating,
             review:review
@@ -36,11 +41,27 @@ $(document).ready(function() {
             rating:rating,
             city:city,
         }
-        addReview(reviewObj);
-        addRate(rateObj);
+        // if not user name or city return to login
+        if(!userName || !userId || !city){
+            location.href = '/home/home.html';
+        }else{
+            addReview(reviewObj);
+            addRate(rateObj);
+        }
+
     })
     // initialize reply modal
     $(".modal").modal();
+
+    // search a review
+    $('.search-btn').on('click',function (){
+        let text = $('.search-input').val();
+        let search = {
+            city:city,
+            text:text
+        }
+        searchReviews(search)
+    })
 })
 /**
  * add a review
@@ -64,18 +85,38 @@ addReview = (data)=>{
 getReviews = (city)=>{
     $('.review-list').empty();
     $.get('/rateAndReview/reviews',city,(res)=>{
-        if(res.length > 0){
-            showScorePercentage(res);
-            res.forEach((item,index)=>{
-                getReplies({reviewId:item._id},index);
-                let reviewItem = `<div class="review-item">
+        renderReviews(res);
+    })
+}
+/**
+ * search reviews by review content
+ * @param search
+ * qiaoli wang (wangqiao@deakin.edu.au)
+ */
+searchReviews = (search) =>{
+    $('.review-list').empty();
+    $.get('/rateAndReview/reviewsSearch', search,(res)=>{
+        renderReviews(res);
+    })
+}
+/**
+ * render reviews to page
+ * @param data
+ * qiaoliwang (wangqiao@deakin.edu.au)
+ */
+renderReviews=(data)=>{
+    if(data.length > 0){
+        showScorePercentage(data);
+        data.forEach((item,index)=>{
+            getReplies({reviewId:item._id},index);
+            let reviewItem = `<div class="review-item">
                     <div class="review-top">
                         <img src="${item.userIcon}" width="32" height="32">
-                        <span>${item.userName}</span>
+                        <span data-uid="${item.userId}">${item.userName}</span>
                     </div>
                     <div class="basic-flex mt-10">
                         <div class="rating-item"></div>
-                        <div class="rating-score">${item.rating}</div>
+                        <div class="rating-score">${parseFloat(item.rating).toFixed(1) }</div>
                         <div class="text-gray ml-10">${moment(item.createTime).fromNow()}</div>
                     </div>
                     <div class="review-content mt-10">
@@ -86,18 +127,17 @@ getReviews = (city)=>{
                     </div>
                     <div class="response-list response-${index}"></div>
                 </div>`
-                $('.review-list').append(reviewItem);
-                $(".rating-item").rateYo({
-                    ratedFill:"#FFC107",
-                    normalFill: "#C4C4C4",
-                    rating: item.rating,
-                    starWidth: "15px"
-                });
-            })
-        }else {
-            $('.review-list').empty();
-        }
-    })
+            $('.review-list').append(reviewItem);
+            $(".rating-item").rateYo({
+                ratedFill:"#FFC107",
+                normalFill: "#C4C4C4",
+                rating: item.rating,
+                starWidth: "15px"
+            });
+        })
+    }else {
+        $('.review-list').append(`<div class="no-data">no data</div>`);
+    }
 }
 /**
  * give a rate
@@ -106,7 +146,7 @@ getReviews = (city)=>{
  */
 addRate = (data)=>{
     $.post('/rateAndReview/addRate',data,(res)=>{
-        console.log(res,'resssss');
+        console.log(res,'add rate');
     })
 }
 /**
@@ -181,6 +221,7 @@ openReplyModal=(index)=>{
 /**
  * close and remove reply modal from page
  * @param index
+ * qiaoliwang (wangqiao@deakin.edu.au)
  */
 closeReplyModal =(index)=>{
     $(`#modalReply-${index} .modal-content .notice-data`).remove();

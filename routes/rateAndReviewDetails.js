@@ -107,6 +107,23 @@ module.exports = params => {
         }
 
     });
+
+    router.get("/reviewsSearch", async (req, res, next) => {
+
+        let {city,text} = req.query;
+
+        try {
+            let reviews = await client.db("reckoning").collection("reviews").find({city:city,"review" : {$regex : `.*${text}.*`}}).toArray();
+            return res.json(reviews);
+
+        } catch (err) {
+            console.log("Error on card detail endpoint", err);
+            return next(err);
+        }
+
+    });
+
+
     /**
      *  add a rating
      * qiaoli wang (wangqiao@deakin.edu.au)
