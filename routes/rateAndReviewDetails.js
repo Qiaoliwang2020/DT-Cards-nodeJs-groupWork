@@ -53,6 +53,23 @@ module.exports = params => {
         }
     })
     /**
+     * add a reply
+     * qiaoli wang (wangqiao@deakin.edu.au)
+     */
+    router.post("/addReply", async (req, res, next) => {
+
+        let reply = req.body;
+        reply.createTime = Date.now();
+        try {
+            const replies = await client.db("reckoning").collection("replies").insertOne(reply);
+            return res.status(200).send({status:200,data:replies.ops[0]})
+
+        } catch (err) {
+            console.log("Error when update card Balance", err);
+            return next(err);
+        }
+    })
+    /**
      *  get all reviews by city
      *  qiaoli wang (wangqiao@deakin.edu.au)
      */
@@ -61,7 +78,7 @@ module.exports = params => {
         let {city} = req.query;
 
         try {
-            let reviews = await client.db("reckoning").collection("reviews").find({city:city}).toArray();
+            let reviews = await client.db("reckoning").collection("reviews").find({city:city}).sort({createTime: -1}).toArray();
 
             return res.json(reviews);
 

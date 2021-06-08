@@ -40,7 +40,7 @@ $(document).ready(function() {
         addRate(rateObj);
     })
     // initialize reply modal
-    $("#modalReply").modal();
+    $(".modal").modal();
 })
 /**
  * add a review
@@ -81,8 +81,9 @@ getReviews = (city)=>{
                         ${item.review}
                     </div>
                     <div class="review-operation">
-                        <span id="reply-${index}" class="text-gray" onclick="addReply(${index})" data-user="${item.userName}">Reply</span>
+                        <span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>
                     </div>
+                    <div class="response-list response-${index}"></div>
                 </div>`
                 $('.review-list').append(reviewItem);
                 $(".rating-item").rateYo({
@@ -153,9 +154,94 @@ showScorePercentage=(data)=>{
     $('.star-1').attr('style',  'width:'+s1.length +'%');
 }
 
-addReply=(index)=>{
-    let replyUser = $(`#reply-${index}`).data('user');;
-    $('.reply-title').text(`Reply @${replyUser}`)
-    M.Modal.getInstance($('#modalReply')).open();
+openReplyModal=(index)=>{
+
+    let replyUser = $(`#reply-${index}`).data('user');
+
+    // create a modal
+    $('body').append(`<div id="modalReply-${index}" class="modal reply-modal-wrap">
+        <div class="modal-content">
+            <p class="reply-title">Reply @${replyUser}</p>
+            <textarea class="reply-content"></textarea>
+        </div>
+        <div class="modal-footer">
+            <a onclick="closeReplyModal(${index})" class="text-gray mr-10 text-cap-all">Cancel</a>
+            <button class="btn-flat small modal-reply-submit ml-50">Submit</button>
+        </div>
+    </div>`)
+
+    submitReply(index);
+}
+/**
+ * close and remove modal from page
+ * @param index
+ */
+closeReplyModal =(index)=>{
+    $(`#modalReply-${index} .modal-content .notice-data`).remove();
+    $(`#modalReply-${index} .reply-title`).text('');
+    $(`#modalReply-${index} .reply-content`).val('');
+    M.Modal.getInstance($(`#modalReply-${index}`)).close();
+    $(`#modalReply-${index}`).remove();
+}
+/**
+ * post a reply
+ * @param index
+ */
+submitReply = (index)=>{
+
+    let replyUser = null,reviewId = null,content = null,currentUser = null;
+    let reply = {};
+
+    // open the modal by index
+    $('.modal').modal();
+    M.Modal.getInstance($(`#modalReply-${index}`)).open();
+    // clear error notice data
+    $(`#modalReply-${index} .modal-content .notice-data`).remove();
+
+    replyUser = $(`#reply-${index}`).data('user');
+    reviewId = $(`#reply-${index}`).data('id')
+    currentUser = $('#userNameSpan').text().trim();
+
+    // if not user login redirect to home(login)
+    if(!currentUser || !replyUser || !reviewId){
+        location.href = '/home/home.html';
+    }else{
+        $(`#modalReply-${index} .modal-reply-submit`).on('click',function (){
+
+            // get reply content
+            content = $(`#modalReply-${index} .reply-content`).val();
+
+            if(content){
+
+                reply = {
+                    user:currentUser,
+                    replyUser: replyUser,
+                    reviewId:reviewId,
+                    content:content
+                }
+                // set button disabled
+                $(`#modalReply-${index} .modal-reply-submit`).attr("disabled", true);
+
+                // request server side
+                $.post('/rateAndReview/addReply',reply,(res)=>{
+                    if(res.status === 200){
+                        // if success close modal and render reply data to page
+                        closeReplyModal(index);
+                        let responseTemplate = `<div class="response-item">
+                          <b>Response from ${res.data.user} </b>
+                          <div class="text-gray"> ${moment(res.createTime).fromNow()}</div>
+                          <div class="response-content mt-10"> ${res.data.content}</div>
+                        </div>`
+                        $(`.response-list.response-${index}`).append(responseTemplate);
+                    }
+                })
+            }else {
+                // if not reply content
+                $(`#modalReply-${index} .modal-reply-submit`).attr("disabled", false);
+                $(`#modalReply-${index} .reply-content`).after('<div class="notice-data">Please enter your reply</div>')
+            }
+        })
+
+    }
 }
 

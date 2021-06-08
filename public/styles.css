@@ -144,8 +144,8 @@ h1.home-title{
 .modal-content{
   position: relative;
 }
-#modalReply{
-  height: 250px!important;
+.notice-data{
+  color: red;
 }
 label {
   font-size: .9rem;
@@ -499,6 +499,8 @@ h1.page-title{
 }
 .review-item{
   margin-top: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f2f2f2;
 }
 .review-item .review-top{
   display: flex;
@@ -514,8 +516,16 @@ h1.page-title{
   justify-content: flex-end;
   align-items: center;
 }
+.reply-modal-wrap{
+  height: 280px!important;
+}
 .reply-content{
   min-height: 100px;
+}
+.response-list .response-item{
+  border-left: 2px solid #F2F2EB;
+  margin-top: 10px;
+  padding-left: 10px;
 }
 /* overwrite style of rate library*/
 .jq-ry-container{
