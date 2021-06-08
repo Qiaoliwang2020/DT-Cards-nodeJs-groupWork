@@ -67,6 +67,7 @@ getReviews = (city)=>{
         if(res.length > 0){
             showScorePercentage(res);
             res.forEach((item,index)=>{
+                getReplies({reviewId:item._id},index);
                 let reviewItem = `<div class="review-item">
                     <div class="review-top">
                         <img src="${item.userIcon}" width="32" height="32">
@@ -154,6 +155,11 @@ showScorePercentage=(data)=>{
     $('.star-1').attr('style',  'width:'+s1.length +'%');
 }
 
+/**
+ * create and open a reply modal
+ * @param index
+ * qiaoliwang (wangqiao@deakin.edu.au)
+ */
 openReplyModal=(index)=>{
 
     let replyUser = $(`#reply-${index}`).data('user');
@@ -173,7 +179,7 @@ openReplyModal=(index)=>{
     submitReply(index);
 }
 /**
- * close and remove modal from page
+ * close and remove reply modal from page
  * @param index
  */
 closeReplyModal =(index)=>{
@@ -186,6 +192,7 @@ closeReplyModal =(index)=>{
 /**
  * post a reply
  * @param index
+ * qiaoliwang (wangqiao@deakin.edu.au)
  */
 submitReply = (index)=>{
 
@@ -243,5 +250,28 @@ submitReply = (index)=>{
         })
 
     }
+}
+/**
+ * get replies by review id
+ * @param reviewId
+ * @param index
+ */
+getReplies = (reviewId,index)=> {
+    let result = {};
+    $('.response-list').empty();
+    $.get('/rateAndReview/replies', reviewId, (res) => {
+        if(res.status === 200){
+            result = res.data;
+            result.forEach((item)=>{
+                let responseTemplate = `<div class="response-item">
+                          <b>Response from ${item.user} </b>
+                          <div class="text-gray"> ${moment(item.createTime).fromNow()}</div>
+                          <div class="response-content mt-10"> ${item.content}</div>
+                        </div>`
+
+                $(`.response-list.response-${index}`).append(responseTemplate);
+            })
+        }
+    })
 }
 

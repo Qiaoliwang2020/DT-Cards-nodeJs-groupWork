@@ -30,7 +30,7 @@ module.exports = params => {
             })
 
         } catch (err) {
-            console.log("Error on card detail enpoint", err);
+            console.log("Error on rate and review get card details  enpoint", err);
             return next(err);
         }
 
@@ -48,7 +48,7 @@ module.exports = params => {
             return res.status(200).send("success")
 
         } catch (err) {
-            console.log("Error when update card Balance", err);
+            console.log("Error add a review", err);
             return next(err);
         }
     })
@@ -65,10 +65,29 @@ module.exports = params => {
             return res.status(200).send({status:200,data:replies.ops[0]})
 
         } catch (err) {
-            console.log("Error when update card Balance", err);
+            console.log("Error add a reply", err);
             return next(err);
         }
     })
+    /**
+     * get replies by review id
+     * qiaoli wang (wangqiao@deakin.edu.au)
+     */
+    router.get("/replies", async (req, res, next) => {
+
+        let {reviewId} = req.query;
+
+        try {
+            let replies = await client.db("reckoning").collection("replies").find({reviewId:reviewId}).sort({createTime: -1}).toArray();
+
+            return res.status(200).send({status:200,data:replies});
+
+        } catch (err) {
+            console.log("Error on get replies endpoint", err);
+            return next(err);
+        }
+
+    });
     /**
      *  get all reviews by city
      *  qiaoli wang (wangqiao@deakin.edu.au)
@@ -83,7 +102,7 @@ module.exports = params => {
             return res.json(reviews);
 
         } catch (err) {
-            console.log("Error on card detail enpoint", err);
+            console.log("Error on card detail endpoint", err);
             return next(err);
         }
 
@@ -101,7 +120,7 @@ module.exports = params => {
             return res.status(200).send("success")
 
         } catch (err) {
-            console.log("Error when update card Balance", err);
+            console.log("Error when add a rating", err);
             return next(err);
         }
     });
@@ -133,7 +152,7 @@ module.exports = params => {
                 return res.status(200).send(rate[0]);
             }
         } catch (err) {
-            console.log("Error on card detail enpoint", err);
+            console.log("Error on get average rate by city endpoint", err);
             return next(err);
         }
 
