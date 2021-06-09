@@ -149,6 +149,7 @@ searchReviews = (search) =>{
  * qiaoliwang (wangqiao@deakin.edu.au)
  */
 renderReviews=(data)=>{
+    let currentUserId = $('#userNameSpan').data('userid');
     if(data.length > 0){
         showScorePercentage(data);
         data.forEach((item,index)=>{
@@ -156,7 +157,7 @@ renderReviews=(data)=>{
             let reviewItem = `<div class="review-item">
                     <div class="review-top">
                         <img src="${item.userIcon}" width="32" height="32">
-                        <span data-uid="${item.userId}">${item.userName}</span>
+                        <span id="user-${index}" data-uid="${item.userId}">${item.userName}</span>
                     </div>
                     <div class="basic-flex mt-10">
                         <div class="rating-item"></div>
@@ -167,7 +168,7 @@ renderReviews=(data)=>{
                         ${item.review}
                     </div>
                     <div class="review-operation">
-                        <span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>
+                        ${currentUserId === item.userId ? '' : `<span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>`}
                     </div>
                     <div class="response-list response-${index}"></div>
                 </div>`
@@ -178,6 +179,7 @@ renderReviews=(data)=>{
                 rating: item.rating,
                 starWidth: "15px"
             });
+            $(".rating-item").rateYo('option', 'readOnly', true);
         })
     }else {
         $('.review-list').append(`<div class="no-data">no data</div>`);
@@ -207,7 +209,8 @@ getAverageRate = (city) =>{
                 rating: res.rating,
                 starWidth: "15px"
             });
-            $('#averageScore-text').text(res.rating);
+            $("#averageScore").rateYo('option', 'readOnly', true);
+            $('#averageScore-text').text(parseFloat(res.rating).toFixed(1));
         }
     })
 }
@@ -281,7 +284,9 @@ closeReplyModal =(index)=>{
  */
 submitReply = (index)=>{
 
-    let replyUser = null,reviewId = null,content = null,currentUser = null;
+    let replyUser = null, reviewId = null, content = null,
+        currentUser = null,currentUid = null,replyUid = null;
+
     let reply = {};
 
     // open the modal by index
@@ -291,8 +296,10 @@ submitReply = (index)=>{
     $(`#modalReply-${index} .modal-content .notice-data`).remove();
 
     replyUser = $(`#reply-${index}`).data('user');
+    replyUid = $(`#user-${index}`).data('uid');
     reviewId = $(`#reply-${index}`).data('id')
     currentUser = $('#userNameSpan').text().trim();
+    currentUid = $('#userNameSpan').data('userid');
 
     // if not user login redirect to home(login)
     if(!currentUser || !replyUser || !reviewId){
@@ -307,9 +314,11 @@ submitReply = (index)=>{
 
                 reply = {
                     user:currentUser,
+                    uid:currentUid,
                     replyUser: replyUser,
+                    replyUid:replyUid,
                     reviewId:reviewId,
-                    content:content
+                    content:content,
                 }
                 // set button disabled
                 $(`#modalReply-${index} .modal-reply-submit`).attr("disabled", true);
@@ -320,7 +329,7 @@ submitReply = (index)=>{
                         // if success close modal and render reply data to page
                         closeReplyModal(index);
                         let responseTemplate = `<div class="response-item">
-                          <b>Response from ${res.data.user} </b>
+                          <b>Response from ${res.data.uid === res.data.replyUid ? 'the author': res.data.user} </b>
                           <div class="text-gray"> ${moment(res.createTime).fromNow()}</div>
                           <div class="response-content mt-10"> ${res.data.content}</div>
                         </div>`
@@ -349,7 +358,7 @@ getReplies = (reviewId,index)=> {
             result = res.data;
             result.forEach((item)=>{
                 let responseTemplate = `<div class="response-item">
-                          <b>Response from ${item.user} </b>
+                          <b>Response from ${item.uid === item.replyUid ? 'the author': item.user} </b>
                           <div class="text-gray"> ${moment(item.createTime).fromNow()}</div>
                           <div class="response-content mt-10"> ${item.content}</div>
                         </div>`

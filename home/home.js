@@ -139,8 +139,9 @@ getTravelHistories = (userId)=>{
             ratedFill:"#FFC107",
             normalFill: "#C4C4C4",
             rating: res.rating,
-            starWidth: "15px"
+            starWidth: "15px",
           });
+          $(".rate-star").rateYo('option', 'readOnly', true);
         });
       })
     }else {
