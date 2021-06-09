@@ -62,6 +62,29 @@ $(document).ready(function() {
         }
         searchReviews(search)
     })
+    // sorting
+    $( ".sorting-item" ).each(function(index) {
+        let category = '';
+        $(this).on("click", function(){
+            // change class
+            $(this).addClass('active').siblings().removeClass('active');
+            // get sort category
+            category = $(this).data('text');
+
+            if(category == 'newest'){
+                // get reviews by current city (sort by date)
+                getReviews({city:city})
+            }
+            else if(category == 'highest'){
+                // show reviews (sort by highest rating)
+                showReviewsSortByHeightScores();
+            }
+            else if(category == 'lowest'){
+                // show reviews (sort by lowest rating)
+                showReviewsSortbyLowScores();
+            }
+      });
+    });
 })
 /**
  * add a review
@@ -78,16 +101,37 @@ addReview = (data)=>{
     })
 }
 /**
- * get reviews by city
+ * get reviews by city (sort by date)
  * @param city
  * qiaoli wang (wangqiao@deakin.edu.au)
  */
+let reviews = [];
 getReviews = (city)=>{
     $('.review-list').empty();
     $.get('/rateAndReview/reviews',city,(res)=>{
+        reviews = res;
         renderReviews(res);
     })
 }
+showNewestReviews =()=>{
+    $('.review-list').empty();
+    renderReviews(reviews);
+}
+showReviewsSortByHeightScores = ()=>{
+    $('.review-list').empty();
+    let result = reviews.sort(function(a,b){
+        return b.rating - a.rating;
+    });
+    renderReviews(result);
+}
+showReviewsSortbyLowScores = ()=>{
+    $('.review-list').empty();
+    let result = reviews.sort(function(a,b){
+        return a.rating - b.rating;
+    });
+    renderReviews(result);
+}
+
 /**
  * search reviews by review content
  * @param search
