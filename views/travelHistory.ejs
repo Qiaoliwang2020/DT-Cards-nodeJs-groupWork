@@ -36,6 +36,9 @@
                             - <%= travelData[i].currency.toUpperCase() %>
                                 <%= travelData[i].amount / 1000 %>
                         </span>
+                        <div>
+                            <a href="/travelDetailsData?travelId=<%= travelData[i]._id %> ">Details</a>
+                        </div>
                     </div>
                 </div>
             </a>

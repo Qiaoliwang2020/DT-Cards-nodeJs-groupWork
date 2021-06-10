@@ -1,0 +1,30 @@
+<div class="ranking-city-page">
+    <div class="container">
+        <h1 class="page-title center">
+            Ranking City
+        </h1>
+        <div class="page-nav-profile">
+            <div class="page-nav-user">
+                <span class="user-icon center">
+                    <img id="user-icon" src="/assets/icon/user.png" width="25" height="25">
+                </span>
+                <div class="ml-10">Hello <span id="userNameSpan"></span> </div>
+            </div>
+            <div class="ml-130"><a href="/home/home.html">Back</a></div>
+        </div>
+        <div class="ranking-list">
+            <div class="rankingList-item-info">
+                <% rankingCityData.forEach(element=> { %>
+                    <div class="h-item-title">
+                        <%= element.city %>
+                            <%= element.rating %>
+
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+
+<script src="/rankingCity.js"></script>

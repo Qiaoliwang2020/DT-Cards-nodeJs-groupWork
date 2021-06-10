@@ -1,0 +1,34 @@
+<div class="transaction-detail-page">
+    <div class="container">
+        <h1 class="page-title center">Transaction Details</h1>
+    </div>
+
+    <span class="transaction-icon">
+        <div class="center-align">
+            <img class="transaction-icon" src="/assets/icon/payment-method.png" width="100px" height="100px">
+        </div>
+    </span>
+    <div class="transaction-detail-item">
+        <div class="transaction-detail-item-title center-align mt-30">
+            <%= travelDetailsData[0].type%>
+        </div>
+    </div>
+    <div class="transaction-detail-item">
+        <% if (travelDetailsData[0].type==='travel' ) { %>
+            <span class="transaction-detail-item">
+                <div class="transaction-detail-item-price center-align">
+                    - <%= travelDetailsData[0].currency.toUpperCase() %>
+                        <%= travelDetailsData[0].amount / 1000 %>
+                </div>
+            </span>
+            <% } else { %>
+                <span class="transaction-detail-item">
+                    <div class="transaction-detail-item-price center-align">
+                        + <%= travelDetailsData[0].currency.toUpperCase() %>
+                            <%= travelDetailsData[0].amount / 1000 %>
+                    </div>
+                </span>
+                <% } %>
+    </div>
+</div>
+</div>
