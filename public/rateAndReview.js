@@ -216,6 +216,8 @@ renderReviews=(data)=>{
                     </div>
                     <div class="review-operation">
                         ${currentUserId === item.userId ? '' : `<span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>`}
+                        ${currentUserId === item.userId ? `<span id="reply-${index}" class="text-gray" >Edit</span>` : ''}
+                        ${currentUserId === item.userId ? `<span id="reply-${index}" class="text-gray ml-20" >Delete</span>` : ''}
                     </div>
                     <div class="response-list response-${index}"></div>
                 </div>`
