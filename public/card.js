@@ -2,7 +2,8 @@ $(document).ready(function() {
 
     let cardNumber =  $('.card-number').text().trim();
     let defaultCurrency =  $('#currency').data('currency');
-    let cardBalance = parseFloat($('#cardBalance').text())
+    let cardBalance = parseFloat($('#cardBalance').text());
+
     // connect to the socket
     let socket = io();
 
@@ -28,67 +29,98 @@ $(document).ready(function() {
     })
     // check exhange rate
     $('#check-exchangeRate').on('click',function (){
-        let amount = getAmount();
-        if(amount){
-            convertCurrency(socket)
+        try {
+            let amount = getAmount();
+            if(amount){
+                convertCurrency(socket)
+            }
+            else{
+                M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
+            }
         }
-        else{
-            M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
+        catch (err){
+            console.log(err, 'check exchange rate')
         }
     })
-    // when user click to  pay
+    // when user click to pay (next)
     $('#pay').on('click',function (){
+        try{
+            let amount = getAmount();
+            let currentUid = $('#userNameSpan').data('userid');
 
-        let amount = getAmount();
-
-        if(amount){
-            $('#modal-payment').modal('close');
-            let cur = $('#currency').val()
-            window.location.href= `/payment?id=${cardNumber}&amount=${amount}&currency=${cur}`;
-        }else{
-            M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
+            if(!currentUid){
+                location.href = '/home/home.html'
+            }else {
+                if(amount){
+                    $('#modal-payment').modal('close');
+                    let cur = $('#currency').val()
+                    window.location.href= `/payment?id=${cardNumber}&amount=${amount}&currency=${cur}`;
+                }else{
+                    M.toast({html: "please select or enter an amount",classes: 'red dark-1'})
+                }
+            }
         }
+        catch (err){
+            console.log(err, 'when user click to pay (next)')
+        }
+
     })
     // withdraw action
     $('#withdrawAction').on('click',function (){
-        if(cardBalance > 0){
-            // withdraw
-            let cardPayId = $('#withdraw').data('pid')
-            let data ={
-                cardId :cardNumber,
-                payId :cardPayId
-            };
-            M.Modal.getInstance($('#modal-withdraw')).open();
-            $.get('/payment/paymentInfo',data,function (res){
-                if(res.data.length >0){
-                    let result = res.data[0];
-                    $('#currencyAmount').attr('data-amount',result.amount/100);
-                    $('#currencyAmount').attr('data-pid',result.id);
-                    $('#currencyAmount').text(`${result.currency.toUpperCase()} ${result.amount/100}`);
-                }
-            })
-        }
-        else {
-            let data ={
-                cardId : cardNumber,
-            }
-            M.Modal.getInstance($('#removeCardNotification')).open();
-
-            $('#disagreeRemove').on('click',function (){
-                M.Modal.getInstance($('#removeCardNotification')).close();
-            })
-            $('#agreeRemove').on('click',function (){
-                $.post( "/cards/deleteCard",data,(result) =>{
-                    if (result == "success"){
-                        M.Modal.getInstance($('#removeCardNotification')).close();
-                        M.toast({html: "Card removed",classes: 'green dark-1'})
-                        setTimeout(function(){
-                            location.href="/home/home.html"
-                        }, 2000);
-
+        let currentUid = $('#userNameSpan').data('userid');
+        try{
+            if(!currentUid){
+                location.href = '/home/home.html'
+            }else{
+                if(cardBalance > 0){
+                    // withdraw
+                    let cardPayId = $('#withdraw').data('pid');
+                    console.log(cardPayId,'pid');
+                    if(cardPayId){
+                        let data ={
+                            cardId :cardNumber,
+                            payId :cardPayId
+                        };
+                        M.Modal.getInstance($('#modal-withdraw')).open();
+                        $.get('/payment/paymentInfo',data,function (res){
+                            if(res.data.length >0){
+                                let result = res.data[0];
+                                $('#currencyAmount').attr('data-amount',result.amount/100);
+                                $('#currencyAmount').attr('data-pid',result.id);
+                                $('#currencyAmount').text(`${result.currency.toUpperCase()} ${result.amount/100}`);
+                            }
+                        })
+                    }else{
+                        console.log('000');
+                        $('#currencyAmount').text(`0`);
                     }
-                })
-            })
+                }
+                else {
+                    let data ={
+                        cardId : cardNumber,
+                    }
+                    M.Modal.getInstance($('#removeCardNotification')).open();
+
+                    $('#disagreeRemove').on('click',function (){
+                        M.Modal.getInstance($('#removeCardNotification')).close();
+                    })
+                    $('#agreeRemove').on('click',function (){
+                        $.post( "/cards/deleteCard",data,(result) =>{
+                            if (result == "success"){
+                                M.Modal.getInstance($('#removeCardNotification')).close();
+                                M.toast({html: "Card removed",classes: 'green dark-1'})
+                                setTimeout(function(){
+                                    location.href="/home/home.html"
+                                }, 2000);
+
+                            }
+                        })
+                    })
+                }
+            }
+        }
+        catch (err){
+            console.log(err, 'card detail page withdraw action')
         }
     })
     // when user click withdraw all
@@ -152,41 +184,46 @@ $(document).ready(function() {
             }
         }
         catch (err){
-            console.log(err)
+            console.log(err,'when user click to withdraw')
         }
     })
 
     // simulate user use the card
     $('.card-details').on('click',function (){
         let userId = $('#userNameSpan').data('userid');
-        let travelItem = [
-            {
-                title:'4-Elizabeth St/Flinders St to 63-Deakin University/Burwood Hwy',
-                amount:2.5,
-            },
-            {
-                title:'Brunswick West - Barkly Square Shopping Centre via Hope Street and Sydney Road',
-                amount:4.5,
-            },
-            {
-                title:'Airport West to Gowanbrae via Melrose Drive and Gowanbrae Drive',
-                amount:5,
-            }]
-        let randomNum = Math.floor(Math.random() * 3);
-        let currentTimestamp = Date.now();
-        let city = $('#cityName').text().trim();
-        let data = {
-            cardId:cardNumber,
-            userId:userId,
-            amount:travelItem[randomNum].amount*1000,
-            title:travelItem[randomNum].title,
-            city:city,
-            created:currentTimestamp,
-            type:"travel",
-            currency:"aud",
+        try{
+            let travelItem = [
+                {
+                    title:'4-Elizabeth St/Flinders St to 63-Deakin University/Burwood Hwy',
+                    amount:2.5,
+                },
+                {
+                    title:'Brunswick West - Barkly Square Shopping Centre via Hope Street and Sydney Road',
+                    amount:4.5,
+                },
+                {
+                    title:'Airport West to Gowanbrae via Melrose Drive and Gowanbrae Drive',
+                    amount:5,
+                }]
+            let randomNum = Math.floor(Math.random() * 3);
+            let currentTimestamp = Date.now();
+            let city = $('#cityName').text().trim();
+            let data = {
+                cardId:cardNumber,
+                userId:userId,
+                amount:travelItem[randomNum].amount*1000,
+                title:travelItem[randomNum].title,
+                city:city,
+                created:currentTimestamp,
+                type:"travel",
+                currency:"aud",
+            }
+            //console.log(data);
+            addTravelData(data)
         }
-        //console.log(data);
-        addTravelData(data)
+        catch (err){
+            console.log(err,'simulate user use the card');
+        }
     })
 })
 
@@ -203,22 +240,26 @@ generateBarCode =(cardNumber)=>{
 getCurrencies = (defaultCurrency) => {
 
     $('#currency').empty();
+    try{
+        $.get("/payment/currencies", (result) => {
 
-    $.get("/payment/currencies", (result) => {
-
-        if(result.message == 'success'){
-            let data = result.currencies.data;
-            let currencies = data.map(elem => ({
-                currency: elem.currency,
-                code: elem.code
-            }));
-            currencies.forEach((item)=>{
-                let currency = `<option value="${item.code}">${item.currency} - ${item.code}</option>`
-                $('#currency').append(currency);
-            })
-            selectElement('currency',defaultCurrency)
-        }
-    })
+            if(result.message == 'success'){
+                let data = result.currencies.data;
+                let currencies = data.map(elem => ({
+                    currency: elem.currency,
+                    code: elem.code
+                }));
+                currencies.forEach((item)=>{
+                    let currency = `<option value="${item.code}">${item.currency} - ${item.code}</option>`
+                    $('#currency').append(currency);
+                })
+                selectElement('currency',defaultCurrency)
+            }
+        })
+    }
+    catch (err){
+        console.log(err,'get currencies')
+    }
 }
 
 selectElement =(id, valueToSelect)=> {
@@ -241,9 +282,19 @@ getAmount = () => {
 
 // update transport card balance
 updateBalance =(data)=>{
-    $.post( "/card/updateBalance",data,(result) =>{
-            if(result === 'success'){}
-     })
+    let cardBalance = parseFloat($('#cardBalance').text())
+    try{
+        $.post( "/card/updateBalance",data,(result) =>{
+            if(result === 'success'){
+                $('#cardBalance').text((cardBalance + data.balance).toFixed(2))
+            }else{
+                console.log('card balance update failed');
+            }
+        })
+    }
+    catch (err){
+        console.log(err,'update transport card balance')
+    }
 }
 // add payment record to database
 addPaymentInfo = (data)=>{
@@ -251,18 +302,24 @@ addPaymentInfo = (data)=>{
     let withdrawAmount = data.amount/100;
     let cardId =  data.cardId;
 
-    $.post('/payment/addPaymentTransaction',data,function (res) {
-        if(res.message == "success"){
-            payId = res.data.payId;
-            let cardInfo = {
-                cardId:cardId,
-                balance:-withdrawAmount,
-                payId: payId,
-                currency:data.currency
+    try{
+        $.post('/payment/addPaymentTransaction',data,function (res) {
+            if(res.message == "success"){
+                payId = res.data.payId;
+                let cardInfo = {
+                    cardId:cardId,
+                    balance:-withdrawAmount,
+                    payId: payId,
+                    currency:data.currency
+                }
+                updateBalance(cardInfo)
             }
-            updateBalance(cardInfo)
-        }
-    })
+        })
+    }
+    catch (err){
+       console.log(err);
+    }
+
 }
 convertCurrency =(socket)=>{
     let amount = getAmount();
@@ -272,11 +329,32 @@ convertCurrency =(socket)=>{
 
 // insert travel data to transaction's collection
 addTravelData = (data)=>{
-    $.post('/travelData/addTransaction',data,function (res) {
-        if(res.message == "success"){
-           console.log(res,'res');
+    let cardBalance = parseFloat($('#cardBalance').text());
+    let payId = $('#withdraw').data('pid');
+    let cost = data.amount/1000;
+    try{
+        if(cardBalance > data.amount/1000){
+            $.post('/travelData/addTransaction',data,function (res) {
+                if(res.message == "success"){
+                    let cardInfo = {
+                        cardId:data.cardId,
+                        balance:-cost,
+                        payId: payId,
+                        currency:data.currency
+                    }
+                    updateBalance(cardInfo);
+                }else{
+                    console.log('add travel data failed');
+                }
+            })
+        }else{
+            M.toast({html: "not enough balance, please recharge",classes: 'red dark-1'})
         }
-    })
+    }
+    catch (err){
+        console.log(err);
+    }
+
 }
 
 
