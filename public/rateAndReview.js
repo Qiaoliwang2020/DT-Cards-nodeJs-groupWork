@@ -211,16 +211,8 @@ renderReviews = (data) => {
                     </div>
                     <div class="review-operation">
                         ${currentUserId === item.userId ? '' : `<span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>`}
-                        ${
-                          currentUserId === item.userId
-                            ? `<span id="edit-${index}" class="text-gray" onclick="EditModal(${index})" data-user="${item.userName}" data-id="${item._id}" data-review="${item.review}">Edit</span>`
-                            : ""
-                        }
-                        ${
-                          currentUserId === item.userId
-                            ? `<span id="delete-${index}" class="text-gray ml-20" onclick="DeleteModal(${index})" data-user="${item.userName}" data-id="${item._id}" data-review="${item.review}">Delete</span>`
-                            : ""
-                        }
+                        ${currentUserId === item.userId ? `<span id="edit-${index}" class="text-gray" onclick="EditModal(${index})" data-user="${item.userName}" data-id="${item._id}" data-review="${item.review}">Edit</span>` : ""}
+                        ${currentUserId === item.userId ? `<span id="delete-${index}" class="text-gray ml-20" onclick="DeleteModal(${index})" data-user="${item.userName}" data-id="${item._id}" data-review="${item.review}">Delete</span>` : ""}
                     </div>
                     <div class="response-list response-${index}"></div>
                 </div>`;
@@ -304,6 +296,7 @@ showScorePercentage = (data) => {
     $(".star-3").attr("style", "width:" + s3.length + "%");
     $(".star-2").attr("style", "width:" + s2.length + "%");
     $(".star-1").attr("style", "width:" + s1.length + "%");
+
   } catch (err) {
     console.log(err);
   }
@@ -331,6 +324,7 @@ openReplyModal = (index) => {
     </div>`);
 
     submitReply(index);
+
   } catch (err) {
     console.log(err);
   }
@@ -401,19 +395,13 @@ submitReply = (index) => {
             if (res.status === 200) {
               // if success close modal and render reply data to page
               closeReplyModal(index);
+
               let responseTemplate = `<div class="response-item">
-                          <b>Response from ${
-                            res.data.uid === res.data.replyUid
-                              ? "the author"
-                              : res.data.user
-                          } </b>
-                          <div class="text-gray"> ${moment(
-                            res.createTime
-                          ).fromNow()}</div>
-                          <div class="response-content mt-10"> ${
-                            res.data.content
-                          }</div>
+                          <b>Response from ${res.data.uid === res.data.replyUid ? "the author": res.data.user} </b>
+                          <div class="text-gray"> ${moment(res.createTime).fromNow()}</div>
+                          <div class="response-content mt-10"> ${res.data.content}</div>
                         </div>`;
+
               $(`.response-list.response-${index}`).append(responseTemplate);
             }
           });
@@ -445,19 +433,10 @@ getReplies = (reviewId, index) => {
         result = res.data;
         result.forEach((item) => {
           let responseTemplate = `<div class="response-item">
-                          <b>Response from ${
-                            item.uid === item.replyUid
-                              ? "the author"
-                              : item.user
-                          } </b>
-                          <div class="text-gray"> ${moment(
-                            item.createTime
-                          ).fromNow()}</div>
-                          <div class="response-content mt-10"> ${
-                            item.content
-                          }</div>
+                          <b>Response from ${item.uid === item.replyUid ? "the author" : item.user} </b>
+                          <div class="text-gray"> ${moment(item.createTime).fromNow()}</div>
+                          <div class="response-content mt-10"> ${item.content}</div>
                         </div>`;
-
           $(`.response-list.response-${index}`).append(responseTemplate);
         });
       }

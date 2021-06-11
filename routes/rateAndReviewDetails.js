@@ -17,37 +17,35 @@ module.exports = (params) => {
    *  qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.get("/", async (req, res, next) => {
+
     let cardId = req.query.cardId;
 
     try {
-      let cardData = await client
-        .db("reckoning")
-        .collection("cards")
-        .find({ _id: ObjectId(cardId) })
-        .toArray();
+      let cardData = await client.db("reckoning").collection("cards").find({ _id: ObjectId(cardId) }).toArray();
 
       return res.render("layout", {
         template: "rateAndReviewDetails",
         cardData,
       });
+
     } catch (err) {
       console.log("Error on rate and review get card details  enpoint", err);
       return next(err);
     }
   });
   /**
-   *  add a review
+   * add a review
    * qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.post("/addReview", async (req, res, next) => {
+
     let review = req.body;
     review.createTime = Date.now();
+
     try {
-      const reviews = await client
-        .db("reckoning")
-        .collection("reviews")
-        .insertOne(review);
+      const reviews = await client.db("reckoning").collection("reviews").insertOne(review);
       return res.status(200).send("success");
+
     } catch (err) {
       console.log("Error add a review", err);
       return next(err);
@@ -58,14 +56,14 @@ module.exports = (params) => {
    * qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.post("/addReply", async (req, res, next) => {
+
     let reply = req.body;
     reply.createTime = Date.now();
+
     try {
-      const replies = await client
-        .db("reckoning")
-        .collection("replies")
-        .insertOne(reply);
+      const replies = await client.db("reckoning").collection("replies").insertOne(reply);
       return res.status(200).send({ status: 200, data: replies.ops[0] });
+
     } catch (err) {
       console.log("Error add a reply", err);
       return next(err);
@@ -76,18 +74,16 @@ module.exports = (params) => {
    * qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.get("/replies", async (req, res, next) => {
+
     let { reviewId } = req.query;
 
     try {
-      let replies = await client
-        .db("reckoning")
-        .collection("replies")
-        .find({ reviewId: reviewId })
-        .sort({ createTime: -1 })
-        .toArray();
+      let replies = await client.db("reckoning").collection("replies").find({ reviewId: reviewId }).sort({ createTime: -1 }).toArray();
 
       return res.status(200).send({ status: 200, data: replies });
+
     } catch (err) {
+
       console.log("Error on get replies endpoint", err);
       return next(err);
     }
@@ -97,53 +93,52 @@ module.exports = (params) => {
    *  qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.get("/reviews", async (req, res, next) => {
+
     let { city } = req.query;
 
     try {
-      let reviews = await client
-        .db("reckoning")
-        .collection("reviews")
-        .find({ city: city })
-        .sort({ createTime: -1 })
-        .toArray();
-
+      let reviews = await client.db("reckoning").collection("reviews").find({ city: city }).sort({ createTime: -1 }).toArray();
       return res.json(reviews);
+
     } catch (err) {
       console.log("Error on card detail endpoint", err);
       return next(err);
     }
   });
-
+  /**
+   * search reviews by review text
+   * qiaoli wang (wangqiao@deakin.edu.au)
+   */
   router.get("/reviewsSearch", async (req, res, next) => {
+
     let { city, text } = req.query;
 
     try {
-      let reviews = await client
-        .db("reckoning")
-        .collection("reviews")
-        .find({ city: city, review: { $regex: `.*${text}.*` } })
-        .toArray();
+      let reviews = await client.db("reckoning").collection("reviews").find({ city: city, review: { $regex: `.*${text}.*` } }).toArray();
       return res.json(reviews);
-    } catch (err) {
+
+    }catch (err) {
+
       console.log("Error on card detail endpoint", err);
       return next(err);
     }
   });
 
   /**
-   *  add a rating
+   * add a rating
    * qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.post("/addRate", async (req, res, next) => {
+
     let rate = req.body;
 
     try {
-      const rates = await client
-        .db("reckoning")
-        .collection("rates")
-        .insertOne(rate);
+      const rates = await client.db("reckoning").collection("rates").insertOne(rate);
+
       return res.status(200).send("success");
+
     } catch (err) {
+
       console.log("Error when add a rating", err);
       return next(err);
     }
@@ -153,33 +148,35 @@ module.exports = (params) => {
    *  qiaoli wang (wangqiao@deakin.edu.au)
    */
   router.get("/averageRate", async (req, res, next) => {
+
     let { city } = req.query;
     try {
-      let rate = await client
-        .db("reckoning")
-        .collection("rates")
-        .find({ city: city })
-        .toArray();
-      let averageRate = { city: "", rating: 0 },
-        totalRating = 0;
+      let rate = await client.db("reckoning").collection("rates").find({ city: city }).toArray();
+
+      let averageRate = { city: "", rating: 0 }, totalRating = 0;
 
       if (rate.length > 1) {
+
         rate.forEach((item) => {
           let rating = parseFloat(item.rating);
           averageRate._id = item._id;
           totalRating += rating;
-          averageRate.rating = (totalRating / rate.length)
-            .toFixed(1)
-            .toString();
+          averageRate.rating = (totalRating / rate.length).toFixed(1).toString();
           averageRate.city = item.city;
         });
+
         return res.status(200).send(averageRate);
+
       } else if (rate.length === 0) {
+
         return res.status(200).send({ city: city, rating: "0.0" });
+
       } else {
+
         return res.status(200).send(rate[0]);
       }
     } catch (err) {
+
       console.log("Error on get average rate by city endpoint", err);
       return next(err);
     }
