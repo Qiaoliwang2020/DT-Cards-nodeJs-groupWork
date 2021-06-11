@@ -7,13 +7,8 @@ removeDuplicates = (data, key) => {
 showRankingList = () => {
   $.get("/rankingCityData/allCities", {}, (result) => {
     let data = result.data;
-
     let newArray = removeDuplicates(data, (item) => item.city);
-
     let finaldata = Array.from(newArray[0]);
-
-    console.log(finaldata, "Array");
-
     var ranking_data = [];
 
     for (let i = 0; i < finaldata.length; i++) {
@@ -33,15 +28,19 @@ showRankingList = () => {
     console.log(ranking_data, "Checking Outside");
     let template = "";
     $(".ranking-list").empty();
+    ("<div>");
     ranking_data.forEach((item) => {
-      console.log(item, "ot");
       template = `<div class="rankingList-item-info">
-          <div class="h-item-title">
-          ${item.city}
-          </div>
-          <div class="h-item-title">
-          ${item.rating}
-          </div>
+  <table class="ranking-table" style="width:100%">
+  <tr>
+    <th>City</th>
+    <th>Rating</th> 
+  </tr>
+  <tr>
+    <td> ${item.city}</td>
+    <td>${item.rating}</td>
+  </tr>
+</table>
   </div>`;
       $(`.ranking-list`).append(template);
     });
@@ -51,5 +50,4 @@ getData = function (data) {
   let average = data.sort(function (a, b) {
     return b.rating - a.rating;
   });
-  console.log(average, "Working");
 };
