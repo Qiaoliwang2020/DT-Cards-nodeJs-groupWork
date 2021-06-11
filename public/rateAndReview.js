@@ -210,11 +210,7 @@ renderReviews = (data) => {
                         ${item.review}
                     </div>
                     <div class="review-operation">
-                        ${
-                          currentUserId === item.userId
-                            ? ""
-                            : `<span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>`
-                        }
+                        ${currentUserId === item.userId ? '' : `<span id="reply-${index}" class="text-gray" onclick="openReplyModal(${index})" data-user="${item.userName}" data-id="${item._id}">Reply</span>`}
                         ${
                           currentUserId === item.userId
                             ? `<span id="edit-${index}" class="text-gray" onclick="EditModal(${index})" data-user="${item.userName}" data-id="${item._id}" data-review="${item.review}">Edit</span>`
@@ -319,7 +315,7 @@ showScorePercentage = (data) => {
  * qiaoliwang (wangqiao@deakin.edu.au)
  */
 openReplyModal = (index) => {
-  let replyUser = $(`#edit-${index}`).data("user");
+  let replyUser = $(`#reply-${index}`).data("user");
   try {
     // create a modal
     $("body")
